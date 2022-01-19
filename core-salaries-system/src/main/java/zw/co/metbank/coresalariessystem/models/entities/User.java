@@ -27,14 +27,14 @@ public class User implements Serializable {
     private UserProfile profile;
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name="user_roles",
-            joinColumns = @JoinColumn(name="id"),
-            inverseJoinColumns = @JoinColumn(name="id")
+            joinColumns = @JoinColumn(referencedColumnName="id"),
+            inverseJoinColumns = @JoinColumn(referencedColumnName="id")
     )
     private List<Role> roles = new ArrayList<>();
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name="user_permissions",
-            joinColumns = @JoinColumn(name="id"),
-            inverseJoinColumns = @JoinColumn(name="id")
+            joinColumns = @JoinColumn(referencedColumnName="id"),
+            inverseJoinColumns = @JoinColumn(referencedColumnName="id")
     )
     private List<Permission> permissions = new ArrayList<>();
 

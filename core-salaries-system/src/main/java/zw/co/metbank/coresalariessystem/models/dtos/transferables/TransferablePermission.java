@@ -10,9 +10,11 @@ import zw.co.metbank.coresalariessystem.models.interfaces.Transferable;
 public class TransferablePermission implements Transferable {
     private String id;
     private String name;
+    private String description;
 
     public TransferablePermission(Permission permission){
         this.id = permission.getId();
         this.name = permission.getName();
+        this.description = permission.getDescription();
     }
 }

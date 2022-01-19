@@ -7,7 +7,7 @@ public class GlobalMethods {
 
     public static String generateId(String code){
         Random r = new Random();
-        StringBuilder s = new StringBuilder();
+        StringBuilder s = new StringBuilder(code);
         for(int i=0; i<6;i++){
             char c = (char)(r.nextInt(26)+'a');
             s.append(c);

@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/metbank-salaries-platform-db?createDatabaseIfNotExist=true
+    username: root
+    password: password123
+
+storage:
+  uploads:
+    files: uploads/files/

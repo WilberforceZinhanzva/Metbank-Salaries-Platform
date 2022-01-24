@@ -4,9 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableBankUserProfile;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +15,9 @@ public class BankUserProfile extends UserProfile {
     private String fullName;
     @Column(name="email")
     private String email;
+    @ManyToOne
+    @JoinColumn(name="bank_company")
+    private BankCompany bankCompany;
 
     public TransferableBankUserProfile serializeForTransfer() {
         return new TransferableBankUserProfile(this);

@@ -1,5 +1,7 @@
 package zw.co.metbank.coresalariessystem.models.dtos.transferables;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import zw.co.metbank.coresalariessystem.models.entities.Permission;
 import zw.co.metbank.coresalariessystem.models.entities.Role;
 import zw.co.metbank.coresalariessystem.models.entities.User;
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
+@NoArgsConstructor
 public class TransferableAdmin implements Transferable {
     private String id;
     private String username;

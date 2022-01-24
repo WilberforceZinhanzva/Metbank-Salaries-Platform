@@ -18,8 +18,10 @@ public class DisbursementFile implements Serializable {
     private String fileSize;
     @Column(name = "file_path")
     private String filePath;
+    @Column(name="original_file_name")
+    private String originalFileName;
     @OneToOne(mappedBy = "disbursementFile")
-    private SalaryDisbursementRequest disbursementRequest;
+    private FileBasedSalaryDisbursementRequest disbursementRequest;
 
     @Override
     public TransferableDisbursementFile serializeForTransfer() {

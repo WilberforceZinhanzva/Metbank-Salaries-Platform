@@ -14,6 +14,8 @@ public class ConsumableClient implements Consumable {
     private String fullName;
     private String email;
     private String phoneNumber;
+    private String companyId;
+    private String role;
 
     @Override
     public ValidityChecker checkValidity() {
@@ -41,6 +43,11 @@ public class ConsumableClient implements Consumable {
         if(Strings.isNullOrEmpty(phoneNumber)){
             vc.setValid(false);
             vc.setMessage("Phonenumber required");
+            return vc;
+        }
+        if(Strings.isNullOrEmpty(companyId)){
+            vc.setValid(false);
+            vc.setMessage("Company Id required");
             return vc;
         }
         return vc;

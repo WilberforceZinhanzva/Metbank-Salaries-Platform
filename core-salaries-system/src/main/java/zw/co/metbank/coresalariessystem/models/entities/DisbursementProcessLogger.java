@@ -1,16 +1,15 @@
 package zw.co.metbank.coresalariessystem.models.entities;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableDisbursementProcessLogger;
 import zw.co.metbank.coresalariessystem.models.enums.DisbursementRequestProcessing;
 import zw.co.metbank.coresalariessystem.models.interfaces.Serializable;
+import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name="disbursement_process_logging")
 public class DisbursementProcessLogger implements Serializable {
@@ -27,6 +26,10 @@ public class DisbursementProcessLogger implements Serializable {
     @ManyToOne
     @JoinColumn(name="disbursement_request")
     private SalaryDisbursementRequest disbursementRequest;
+
+    public DisbursementProcessLogger(){
+        this.id = GlobalMethods.generateId("DISBLOG");
+    }
 
 
     @Override

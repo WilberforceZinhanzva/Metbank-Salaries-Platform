@@ -5,6 +5,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  thymeleaf:
+    prefix: classpath:/templates
+    suffix: .html
 
 springdoc:
   swagger-ui:

@@ -3,9 +3,8 @@ package zw.co.metbank.coresalariessystem.models.entities;
 import lombok.Data;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClientProfile;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 @Data
 @Entity
 @Table(name="client_profiles")
@@ -17,6 +16,9 @@ public class ClientProfile extends UserProfile{
     private String email;
     @Column(name="phonenumber",nullable = false)
     private String phoneNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="client_company")
+    private ClientCompany clientCompany;
 
     @Override
     public TransferableClientProfile serializeForTransfer() {

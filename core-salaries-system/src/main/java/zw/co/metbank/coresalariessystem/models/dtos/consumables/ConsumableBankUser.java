@@ -13,6 +13,7 @@ public class ConsumableBankUser implements Consumable {
     private String password;
     private String fullName;
     private String email;
+    private String companyId;
 
     @Override
     public ValidityChecker checkValidity() {
@@ -35,6 +36,11 @@ public class ConsumableBankUser implements Consumable {
         if(Strings.isNullOrEmpty(email)){
             vc.setValid(false);
             vc.setMessage("Email required");
+            return vc;
+        }
+        if(Strings.isNullOrEmpty(companyId)){
+            vc.setValid(false);
+            vc.setMessage("Company Id required");
             return vc;
         }
         return vc;

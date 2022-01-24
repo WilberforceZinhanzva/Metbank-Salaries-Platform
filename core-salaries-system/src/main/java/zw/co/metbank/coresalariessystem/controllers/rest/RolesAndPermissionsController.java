@@ -1,4 +1,4 @@
-package zw.co.metbank.coresalariessystem.controllers;
+package zw.co.metbank.coresalariessystem.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

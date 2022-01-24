@@ -1,7 +1,6 @@
 package zw.co.metbank.coresalariessystem.models.entities;
 
 import lombok.Data;
-import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableSalaryDisbursementRequest;
 import zw.co.metbank.coresalariessystem.models.enums.DisbursementRequestProcessing;
 import zw.co.metbank.coresalariessystem.models.interfaces.Serializable;
 
@@ -13,22 +12,18 @@ import java.util.List;
 @Data
 @Entity
 @Table(name="salary_disbursement_requests")
-public class SalaryDisbursementRequest  implements Serializable {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class SalaryDisbursementRequest  implements Serializable {
 
     @Id
     private String id;
     private LocalDateTime placedOn;
     @Enumerated(EnumType.STRING)
     private DisbursementRequestProcessing currentStage;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "disbursement_file")
-    private DisbursementFile disbursementFile;
+
     @OrderBy("doneAt desc")
     @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private List<DisbursementProcessLogger> actionLogging = new ArrayList<>();
 
-    @Override
-    public TransferableSalaryDisbursementRequest serializeForTransfer() {
-        return new TransferableSalaryDisbursementRequest(this);
-    }
+
 }

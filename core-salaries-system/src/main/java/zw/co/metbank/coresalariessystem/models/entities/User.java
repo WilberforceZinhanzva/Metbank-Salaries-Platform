@@ -2,6 +2,8 @@ package zw.co.metbank.coresalariessystem.models.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableAdmin;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableBankUser;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClient;
@@ -25,18 +27,23 @@ public class User implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_profile")
     private UserProfile profile;
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name="user_roles",
             joinColumns = @JoinColumn(referencedColumnName="id"),
             inverseJoinColumns = @JoinColumn(referencedColumnName="id")
     )
     private List<Role> roles = new ArrayList<>();
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH}, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name="user_permissions",
             joinColumns = @JoinColumn(referencedColumnName="id"),
             inverseJoinColumns = @JoinColumn(referencedColumnName="id")
     )
     private List<Permission> permissions = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "user")
+    private List<UserActionLogger> actionsLogs = new ArrayList<>();
 
     @Override
     public Transferable serializeForTransfer() {
@@ -48,5 +55,12 @@ public class User implements Serializable {
             return new TransferableBankUser(this);
 
         return null;
+    }
+
+
+    public void print(){
+        System.out.println(username);
+        System.out.println(password);
+        System.out.println(accountLocked);
     }
 }

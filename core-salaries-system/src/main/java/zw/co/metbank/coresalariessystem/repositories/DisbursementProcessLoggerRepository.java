@@ -1,4 +1,8 @@
 package zw.co.metbank.coresalariessystem.repositories;
 
-public interface DisbursementProcessLoggerRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import zw.co.metbank.coresalariessystem.models.entities.DisbursementProcessLogger;
+
+
+public interface DisbursementProcessLoggerRepository extends JpaRepository<DisbursementProcessLogger,String> {
 }

@@ -11,10 +11,12 @@ public class TransferableDisbursementFile implements Transferable {
     private String id;
     private String fileSize;
     private String filePath;
+    private String originalFileName;
 
     public TransferableDisbursementFile(DisbursementFile file){
         this.id = file.getId();
         this.fileSize = file.getFileSize();
         this.filePath = file.getFilePath();
+        this.originalFileName = file.getOriginalFileName();
     }
 }

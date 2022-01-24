@@ -2,6 +2,7 @@ package zw.co.metbank.coresalariessystem.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -27,4 +28,18 @@ public class CustomExceptionHandler {
         CustomException exception = new CustomException(e.getMessage(),HttpStatus.CONFLICT);
         return new ResponseEntity<>(exception,HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(value={InvalidConsumableException.class})
+    public ResponseEntity<CustomException> handleInvalidConsumableException(InvalidConsumableException e){
+        CustomException exception = new CustomException(e.getMessage(),HttpStatus.CONFLICT);
+        return new ResponseEntity<>(exception, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value={FileCreationException.class})
+    public ResponseEntity<CustomException> handleFileCreationException(FileCreationException e){
+        CustomException exception = new CustomException(e.getMessage(),HttpStatus.CONFLICT);
+        return new ResponseEntity<>(exception,HttpStatus.CONFLICT);
+    }
+
+
 }

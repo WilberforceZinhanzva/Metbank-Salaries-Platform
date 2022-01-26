@@ -1,0 +1,48 @@
+version: '3'
+services:
+  salarymanager:
+    depends_on:
+      - maria-test-db
+    container_name: salarymanager
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: salarymanager:latest
+    ports:
+      - 8080:8080
+    networks:
+      platform-network:
+        ipv4_address: "192.168.1.101"
+
+  maria-test-db:
+    image: bitnami/mariadb:latest
+    container_name: salarymanagertestdb
+    ports:
+      - 3303:3306
+    environment:
+      - "MARIADB_ROOT_PASSWORD=skdcnwauicn2ucnaecasdsajdnizucawencascdca"
+      - "MARIADB_USER=developer"
+      - "MARIADB_PASSWORD=#m3tb@nk1#"
+      - "MARIADB_EXTRA_FLAGS=--max-connect-errors=1000 --max_connections=300"
+      - "MARIADB_DATABASE=test_database"
+    restart: on-failure
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    networks:
+      platform-network:
+        ipv4_address: "192.168.1.100"
+
+
+
+
+networks:
+  platform-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+
+volumes:
+  mariadb-data:
+    driver: local

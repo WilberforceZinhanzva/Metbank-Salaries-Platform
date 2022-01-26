@@ -4,6 +4,3 @@ spring:
     username: root
     password: password123
 
-storage:
-  uploads:
-    files: uploads/files/

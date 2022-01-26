@@ -17,6 +17,8 @@ public class TransferableFileBasedSalaryDisbursementRequest implements Transfera
     private String id;
     private LocalDateTime placedOn;
     private String currentStage;
+    private String companyName;
+    private String companyId;
     private TransferableDisbursementFile disbursementFile;
     private List<TransferableDisbursementProcessLogger> actionLogging = new ArrayList<>();
 
@@ -24,6 +26,8 @@ public class TransferableFileBasedSalaryDisbursementRequest implements Transfera
         this.id = request.getId();
         this.placedOn = request.getPlacedOn();
         this.currentStage = request.getCurrentStage().toString();
+        this.companyName = request.getCompany().getName();
+        this.companyId = request.getCompany().getId();
         this.disbursementFile = request.getDisbursementFile().serializeForTransfer();
         this.actionLogging = request.getActionLogging().stream().map(DisbursementProcessLogger::serializeForTransfer).collect(Collectors.toList());
 

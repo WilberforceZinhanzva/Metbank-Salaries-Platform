@@ -5,13 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableClient;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClient;
 import zw.co.metbank.coresalariessystem.models.enums.ClientsSearchKey;
+import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.ClientsService;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/users/clients")
@@ -29,9 +29,10 @@ public class ClientsController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RegisterClients')")
-    public ResponseEntity<TransferableClient> newClient(@RequestBody ConsumableClient consumable, Principal principal){
-        TransferableClient result = clientsService.newClient(consumable,principal);
+    @PreAuthorize("hasAuthority('Register Clients')")
+    public ResponseEntity<TransferableClient> newClient(@RequestBody ConsumableClient consumable){
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TransferableClient result = clientsService.newClient(consumable,authenticatedUser);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 }

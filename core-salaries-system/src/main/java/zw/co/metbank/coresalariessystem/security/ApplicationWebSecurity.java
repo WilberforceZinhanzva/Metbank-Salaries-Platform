@@ -1,6 +1,7 @@
 package zw.co.metbank.coresalariessystem.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -21,6 +23,8 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
     private ApplicationUserDetailsService applicationUserDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
@@ -38,11 +42,7 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
             "/webjars/**"
     };
 
-    public static final String[] RESOURCES_WHITELIST={
-            "/assets/**",
-            "/javascript/**",
-            "/styles/**"
-    };
+
 
 
     @Override
@@ -58,15 +58,18 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
-                .antMatchers(RESOURCES_WHITELIST).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
+                //.exceptionHandling().accessDeniedHandler(restAccessDeniedHandler).authenticationEntryPoint(restAuthenticationEntryPoint)
+                //.and()
                 .formLogin()
                     .loginPage("/api/v1/login")
                     .permitAll()
                     .successHandler(new RefererRedirectAuthenticationSuccessHandler())
-                    .failureUrl("/api/v1/login?failure")
+                    .failureHandler(authenticationFailureHandler())
+
+                    //.failureUrl("/api/v1/login-failed")
                 .and()
                 .logout()
                 .logoutUrl("/api/v1/logout").permitAll()
@@ -75,6 +78,11 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/api/v1/login?logout");
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler(){
+        return new CustomAuthenticationFailureHandler();
     }
 
 

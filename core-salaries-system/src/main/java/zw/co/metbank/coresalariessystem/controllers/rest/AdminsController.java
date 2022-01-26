@@ -5,10 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableAdmin;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableAdmin;
 import zw.co.metbank.coresalariessystem.models.enums.AdminsSearchKey;
+import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.AdminsService;
 
 import java.security.Principal;
@@ -30,7 +32,8 @@ public class AdminsController {
     @PostMapping
     @PreAuthorize("hasPermission('RegisterAdmins')")
     public ResponseEntity<TransferableAdmin> newAdmin(@RequestBody ConsumableAdmin consumable, Principal principal){
-        TransferableAdmin result = adminsService.newAdmin(consumable,principal);
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TransferableAdmin result = adminsService.newAdmin(consumable,authenticatedUser);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

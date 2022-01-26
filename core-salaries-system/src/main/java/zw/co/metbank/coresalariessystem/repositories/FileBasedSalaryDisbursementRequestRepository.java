@@ -9,5 +9,9 @@ import zw.co.metbank.coresalariessystem.models.enums.DisbursementRequestProcessi
 public interface FileBasedSalaryDisbursementRequestRepository extends JpaRepository<FileBasedSalaryDisbursementRequest,String> {
 
     Page<FileBasedSalaryDisbursementRequest> findByActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(String doneBy, DisbursementRequestProcessing stage, Pageable pageable);
+    Page<FileBasedSalaryDisbursementRequest> findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(String companyId,String doneBy, DisbursementRequestProcessing stage, Pageable pageable);
     Page<FileBasedSalaryDisbursementRequest> findByCurrentStage(DisbursementRequestProcessing currentStage, Pageable pageable);
+    Page<FileBasedSalaryDisbursementRequest> findByCompany_IdAndCurrentStage(String companyId,DisbursementRequestProcessing currentStage, Pageable pageable);
+    Page<FileBasedSalaryDisbursementRequest> findByCompany_Id(String id, Pageable pageable);
+    Page<FileBasedSalaryDisbursementRequest> findByCompany_NameContainingIgnoreCase(String companyName, Pageable pageable);
 }

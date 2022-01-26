@@ -6,15 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import zw.co.metbank.coresalariessystem.exceptions.ResourceNotFoundException;
-import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableAdmin;
 import zw.co.metbank.coresalariessystem.models.entities.*;
 import zw.co.metbank.coresalariessystem.models.enums.Permissions;
 import zw.co.metbank.coresalariessystem.models.enums.Roles;
 import zw.co.metbank.coresalariessystem.repositories.PermissionRepository;
 import zw.co.metbank.coresalariessystem.repositories.RoleRepository;
 import zw.co.metbank.coresalariessystem.repositories.UserRepository;
-import zw.co.metbank.coresalariessystem.services.AdminsService;
-import zw.co.metbank.coresalariessystem.services.UserService;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 
 import java.io.File;
@@ -22,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,32 +68,38 @@ public class StartupService {
         log.info("Roles up to date!");
     }
     public void createPermissions(){
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterClients.name))
-            permissionRepository.save(new Permission(Permissions.RegisterClients.name, Permissions.RegisterClients.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterAdmins.name))
-            permissionRepository.save(new Permission(Permissions.RegisterAdmins.name,Permissions.RegisterAdmins.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterBanks.name))
-            permissionRepository.save(new Permission(Permissions.RegisterBanks.name,Permissions.RegisterAdmins.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteClients.name))
-            permissionRepository.save(new Permission(Permissions.DeleteClients.name,Permissions.DeleteClients.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteAdmins.name))
-            permissionRepository.save(new Permission(Permissions.DeleteAdmins.name,Permissions.DeleteAdmins.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteBanks.name))
-            permissionRepository.save(new Permission(Permissions.DeleteBanks.name,Permissions.DeleteBanks.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ChangeUserPermissions.name))
-            permissionRepository.save(new Permission(Permissions.ChangeUserPermissions.name,Permissions.ChangeUserPermissions.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.InitiateSalaryRequest.name))
-            permissionRepository.save(new Permission(Permissions.InitiateSalaryRequest.name,Permissions.ChangeUserPermissions.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.AuthorizeSalaryRequest.name))
-            permissionRepository.save(new Permission(Permissions.AuthorizeSalaryRequest.name,Permissions.AuthorizeSalaryRequest.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ReviewSalaryRequest.name))
-            permissionRepository.save(new Permission(Permissions.ReviewSalaryRequest.name,Permissions.ReviewSalaryRequest.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ApproveSalaryRequest.name))
-            permissionRepository.save(new Permission(Permissions.ApproveSalaryRequest.name,Permissions.ApproveSalaryRequest.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeclineSalaryRequest.name))
-            permissionRepository.save(new Permission(Permissions.DeclineSalaryRequest.name,Permissions.DeclineSalaryRequest.description));
-        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DownloadFiles.name))
-            permissionRepository.save(new Permission(Permissions.DownloadFiles.name,Permissions.DownloadFiles.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterClients.name))
+//            permissionRepository.save(new Permission(Permissions.RegisterClients.name, Permissions.RegisterClients.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterAdmins.name))
+//            permissionRepository.save(new Permission(Permissions.RegisterAdmins.name,Permissions.RegisterAdmins.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterBanks.name))
+//            permissionRepository.save(new Permission(Permissions.RegisterBanks.name,Permissions.RegisterAdmins.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteClients.name))
+//            permissionRepository.save(new Permission(Permissions.DeleteClients.name,Permissions.DeleteClients.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteAdmins.name))
+//            permissionRepository.save(new Permission(Permissions.DeleteAdmins.name,Permissions.DeleteAdmins.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteBanks.name))
+//            permissionRepository.save(new Permission(Permissions.DeleteBanks.name,Permissions.DeleteBanks.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ChangeUserPermissions.name))
+//            permissionRepository.save(new Permission(Permissions.ChangeUserPermissions.name,Permissions.ChangeUserPermissions.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.InitiateSalaryRequest.name))
+//            permissionRepository.save(new Permission(Permissions.InitiateSalaryRequest.name,Permissions.ChangeUserPermissions.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.AuthorizeSalaryRequest.name))
+//            permissionRepository.save(new Permission(Permissions.AuthorizeSalaryRequest.name,Permissions.AuthorizeSalaryRequest.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ReviewSalaryRequest.name))
+//            permissionRepository.save(new Permission(Permissions.ReviewSalaryRequest.name,Permissions.ReviewSalaryRequest.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ApproveSalaryRequest.name))
+//            permissionRepository.save(new Permission(Permissions.ApproveSalaryRequest.name,Permissions.ApproveSalaryRequest.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeclineSalaryRequest.name))
+//            permissionRepository.save(new Permission(Permissions.DeclineSalaryRequest.name,Permissions.DeclineSalaryRequest.description));
+//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DownloadFiles.name))
+//            permissionRepository.save(new Permission(Permissions.DownloadFiles.name,Permissions.DownloadFiles.description));
+
+        for(Permissions permissions : new ArrayList<Permissions>(EnumSet.allOf(Permissions.class))){
+            if(!permissionRepository.existsByNameIgnoreCase(permissions.name)){
+                permissionRepository.save(new Permission(permissions.name,permissions.description));
+            }
+        }
 
         log.info("Permissions up to date!");
     }

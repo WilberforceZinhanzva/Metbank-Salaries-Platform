@@ -24,6 +24,7 @@ public class User implements Serializable {
     private String username;
     private String password;
     private Boolean accountLocked;
+    private Boolean passwordRequired = true;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_profile")
     private UserProfile profile;
@@ -58,9 +59,5 @@ public class User implements Serializable {
     }
 
 
-    public void print(){
-        System.out.println(username);
-        System.out.println(password);
-        System.out.println(accountLocked);
-    }
+
 }

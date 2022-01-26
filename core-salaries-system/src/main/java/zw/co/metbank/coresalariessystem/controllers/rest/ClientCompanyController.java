@@ -5,12 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableClientCompany;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClientCompany;
+import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.ClientCompanyService;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/client-companies")
@@ -28,15 +28,16 @@ public class ClientCompanyController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('RegisterClients')")
-    public ResponseEntity<TransferableClientCompany> newClientCompany(@RequestBody ConsumableClientCompany consumable, Principal principal){
-        TransferableClientCompany clientCompany = clientCompanyService.newClientCompany(consumable,principal);
+    @PreAuthorize("hasAuthority('Register Clients')")
+    public ResponseEntity<TransferableClientCompany> newClientCompany(@RequestBody ConsumableClientCompany consumable){
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TransferableClientCompany clientCompany = clientCompanyService.newClientCompany(consumable,authenticatedUser);
         return new ResponseEntity<>(clientCompany,HttpStatus.OK);
 
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('DeleteClients')")
+    @PreAuthorize("hasAuthority('Delete Clients')")
     public ResponseEntity<TransferableClientCompany> deleteClientCompany(@PathVariable("id") String id){
         TransferableClientCompany clientCompany = clientCompanyService.deleteClientCompany(id);
         return new ResponseEntity<>(clientCompany,HttpStatus.OK);

@@ -25,6 +25,8 @@ public class ClientCompany implements Serializable {
     private List<ClientProfile> usersForCompany = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "clientCompany")
     private List<ClientCompanyActionLogger> actionLogs = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<SalaryDisbursementRequest> salaryRequests = new ArrayList<>();
 
     public ClientCompany(String name){
         this.id = GlobalMethods.generateId("CC");

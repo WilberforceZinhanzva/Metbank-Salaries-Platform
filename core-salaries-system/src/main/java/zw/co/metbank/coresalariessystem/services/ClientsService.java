@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import zw.co.metbank.coresalariessystem.exceptions.InvalidConsumableException;
 import zw.co.metbank.coresalariessystem.exceptions.ResourceNotFoundException;
@@ -14,13 +15,12 @@ import zw.co.metbank.coresalariessystem.models.entities.*;
 import zw.co.metbank.coresalariessystem.models.enums.ClientsSearchKey;
 import zw.co.metbank.coresalariessystem.models.enums.Permissions;
 import zw.co.metbank.coresalariessystem.models.enums.Roles;
-import zw.co.metbank.coresalariessystem.models.extras.LoggedUserDetails;
 import zw.co.metbank.coresalariessystem.projections.IdsOnly;
 import zw.co.metbank.coresalariessystem.repositories.*;
+import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,8 +44,9 @@ public class ClientsService {
     @Autowired
     private ClientProfileRepository clientProfileRepository;
 
+
     @Autowired
-    private LoggedUserDetailsService loggedUserDetailsService;
+    private PasswordEncoder passwordEncoder;
 
 
     public Page<TransferableClient> clients(ClientsSearchKey searchKey, String searchParam, int page , int pageSize){
@@ -108,11 +109,11 @@ public class ClientsService {
         return serializedPage;
     }
 
-    public TransferableClient newClient(ConsumableClient consumable, Principal principal){
+    public TransferableClient newClient(ConsumableClient consumable, AuthenticatedUser authenticatedUser){
 
-        LoggedUserDetails loggedUserDetails = loggedUserDetailsService.loggedUserDetails(principal.getName());
-        String actor = loggedUserDetails.getFullname();
-        String actorId = loggedUserDetails.getId();
+
+        String actor = authenticatedUser.getFullname();
+        String actorId = authenticatedUser.getUserId();
 
 
         ValidityChecker vc = consumable.checkValidity();
@@ -122,7 +123,7 @@ public class ClientsService {
         User client = new User();
         client.setId(GlobalMethods.generateId("CLIENT"));
         client.setUsername(consumable.getUsername());
-        client.setPassword(consumable.getUsername());
+        client.setPassword(passwordEncoder.encode(consumable.getUsername()));
         client.setAccountLocked(false);
 
         Optional<Role> role = roleRepository.findByName(consumable.getRole());

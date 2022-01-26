@@ -6,7 +6,10 @@ import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferablePe
 import zw.co.metbank.coresalariessystem.models.interfaces.Serializable;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 

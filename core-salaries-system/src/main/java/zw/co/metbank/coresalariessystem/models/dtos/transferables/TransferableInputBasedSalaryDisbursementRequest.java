@@ -18,6 +18,8 @@ public class TransferableInputBasedSalaryDisbursementRequest implements Transfer
     private String id;
     private LocalDateTime placedOn;
     private String currentStage;
+    private String companyName;
+    private String companyId;
     private TransferableGeneratedSalariesFile generatedSalariesFile;
     private List<TransferableDisbursementInput> disbursementInputs = new ArrayList<>();
     private List<TransferableDisbursementProcessLogger> actionLogging = new ArrayList<>();
@@ -26,6 +28,8 @@ public class TransferableInputBasedSalaryDisbursementRequest implements Transfer
         this.id = request.getId();
         this.placedOn = request.getPlacedOn();
         this.currentStage = request.getCurrentStage().toString();
+        this.companyName = request.getCompany().getName();
+        this.companyId = request.getCompany().getId();
         this.generatedSalariesFile = request.getGeneratedSalariesFile().serializeForTransfer();
         this.disbursementInputs = request.getDisbursementInputs().stream().map(DisbursementInput::serializeForTransfer).collect(Collectors.toList());
         this.actionLogging = request.getActionLogging().stream().map(DisbursementProcessLogger::serializeForTransfer).collect(Collectors.toList());

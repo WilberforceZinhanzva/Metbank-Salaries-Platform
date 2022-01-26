@@ -14,16 +14,15 @@ import zw.co.metbank.coresalariessystem.models.entities.*;
 import zw.co.metbank.coresalariessystem.models.enums.AdminsSearchKey;
 import zw.co.metbank.coresalariessystem.models.enums.Permissions;
 import zw.co.metbank.coresalariessystem.models.enums.Roles;
-import zw.co.metbank.coresalariessystem.models.extras.LoggedUserDetails;
 import zw.co.metbank.coresalariessystem.projections.IdsOnly;
 import zw.co.metbank.coresalariessystem.repositories.AdminProfileRepository;
 import zw.co.metbank.coresalariessystem.repositories.PermissionRepository;
 import zw.co.metbank.coresalariessystem.repositories.RoleRepository;
 import zw.co.metbank.coresalariessystem.repositories.UserRepository;
+import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,8 +42,6 @@ public class AdminsService {
     @Autowired
     private AdminProfileRepository adminProfileRepository;
 
-    @Autowired
-    private LoggedUserDetailsService loggedUserDetailsService;
 
 
     public Page<TransferableAdmin> admins(AdminsSearchKey searchKey, String searchParam, int page, int pageSize){
@@ -96,10 +93,10 @@ public class AdminsService {
         return serializedPage;
     }
 
-    public TransferableAdmin newAdmin(ConsumableAdmin consumable, Principal principal){
-        LoggedUserDetails loggedUserDetails = loggedUserDetailsService.loggedUserDetails(principal.getName());
-        String actor = loggedUserDetails.getFullname();
-        String actorId = loggedUserDetails.getId();
+    public TransferableAdmin newAdmin(ConsumableAdmin consumable, AuthenticatedUser authenticatedUser){
+
+        String actor = authenticatedUser.getFullname();
+        String actorId = authenticatedUser.getUserId();
 
         ValidityChecker vc = consumable.checkValidity();
         if(!vc.isValid())

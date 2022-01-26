@@ -5,12 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableBankCompany;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableBankCompany;
+import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.BankCompanyService;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/bank-companies")
@@ -28,8 +28,9 @@ public class BankCompanyController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('RegisterBanks')")
-    public ResponseEntity<TransferableBankCompany> newBankCompany(@RequestBody ConsumableBankCompany consumable, Principal principal){
-        TransferableBankCompany result = bankCompanyService.newBankCompany(consumable,principal);
+    public ResponseEntity<TransferableBankCompany> newBankCompany(@RequestBody ConsumableBankCompany consumable){
+        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TransferableBankCompany result = bankCompanyService.newBankCompany(consumable,authenticatedUser);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 

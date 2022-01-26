@@ -20,6 +20,9 @@ public abstract class SalaryDisbursementRequest  implements Serializable {
     private LocalDateTime placedOn;
     @Enumerated(EnumType.STRING)
     private DisbursementRequestProcessing currentStage;
+    @ManyToOne
+    @JoinColumn(name="client_company")
+    private ClientCompany company;
 
     @OrderBy("doneAt desc")
     @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.LAZY)

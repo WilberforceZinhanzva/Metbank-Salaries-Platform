@@ -12,12 +12,11 @@ import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableBankCo
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableBankCompany;
 import zw.co.metbank.coresalariessystem.models.entities.BankCompany;
 import zw.co.metbank.coresalariessystem.models.entities.BankCompanyActionLogger;
-import zw.co.metbank.coresalariessystem.models.extras.LoggedUserDetails;
 import zw.co.metbank.coresalariessystem.repositories.BankCompanyRepository;
+import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +28,7 @@ public class BankCompanyService {
     @Autowired
     private BankCompanyRepository bankCompanyRepository;
 
-    @Autowired
-    private LoggedUserDetailsService loggedUserDetailsService;
+
 
     public Page<TransferableBankCompany> bankCompanies(int page, int pageSize){
         Pageable pageable = PageRequest.of(page,pageSize);
@@ -41,11 +39,11 @@ public class BankCompanyService {
         return serializedPage;
     }
 
-    public TransferableBankCompany newBankCompany(ConsumableBankCompany consumable, Principal principal){
+    public TransferableBankCompany newBankCompany(ConsumableBankCompany consumable, AuthenticatedUser authenticatedUser){
 
-        LoggedUserDetails loggedUserDetails = loggedUserDetailsService.loggedUserDetails(principal.getName());
-        String actor = loggedUserDetails.getFullname();
-        String actorId = loggedUserDetails.getId();
+
+        String actor = authenticatedUser.getFullname();
+        String actorId = authenticatedUser.getUserId();
 
 
         ValidityChecker vc = consumable.checkValidity();

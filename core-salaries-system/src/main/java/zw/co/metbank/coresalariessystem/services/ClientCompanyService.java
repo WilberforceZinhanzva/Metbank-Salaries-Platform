@@ -12,12 +12,11 @@ import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableClient
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClientCompany;
 import zw.co.metbank.coresalariessystem.models.entities.ClientCompany;
 import zw.co.metbank.coresalariessystem.models.entities.ClientCompanyActionLogger;
-import zw.co.metbank.coresalariessystem.models.extras.LoggedUserDetails;
 import zw.co.metbank.coresalariessystem.repositories.ClientCompanyRepository;
+import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +28,6 @@ public class ClientCompanyService {
     @Autowired
     private ClientCompanyRepository clientCompanyRepository;
 
-    @Autowired
-    private LoggedUserDetailsService loggedUserDetailsService;
 
 
     public Page<TransferableClientCompany> clientCompanies(int page, int pageSize){
@@ -41,10 +38,10 @@ public class ClientCompanyService {
         return serializedPage;
     }
 
-    public TransferableClientCompany newClientCompany(ConsumableClientCompany consumable, Principal principal){
-        LoggedUserDetails loggedUserDetails = loggedUserDetailsService.loggedUserDetails(principal.getName());
-        String actor = loggedUserDetails.getFullname();
-        String actorId = loggedUserDetails.getId();
+    public TransferableClientCompany newClientCompany(ConsumableClientCompany consumable, AuthenticatedUser authenticatedUser){
+
+        String actor = authenticatedUser.getFullname();
+        String actorId = authenticatedUser.getUserId();
 
         ValidityChecker vc = consumable.checkValidity();
         if(!vc.isValid())

@@ -64,6 +64,7 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
+        .antMatchers("/api/v1/login_handler").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

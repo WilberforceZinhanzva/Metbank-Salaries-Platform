@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
+@Configuration
 public class CorsConfig implements Filter {
 
     public CorsConfig() {

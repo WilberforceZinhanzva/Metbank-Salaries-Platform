@@ -15,7 +15,7 @@ import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableIn
 import zw.co.metbank.coresalariessystem.models.enums.DisbursementRequestProcessing;
 import zw.co.metbank.coresalariessystem.models.enums.SalaryDisbursementRequestSearchKey;
 import zw.co.metbank.coresalariessystem.models.interfaces.Transferable;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.DisbursementService;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class DisbursementController {
     @GetMapping("/file-based/company-specific")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_CLIENT','ROLE_LITE_CLIENT')")
     public ResponseEntity<Page<TransferableFileBasedSalaryDisbursementRequest>> fileBasedCompanyRequests(@RequestParam int page ,@RequestParam int pageSize,@RequestParam SalaryDisbursementRequestSearchKey searchKey,@RequestParam String searchParam){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Page<TransferableFileBasedSalaryDisbursementRequest> resultPage = disbursementService.fileBasedRequests(page, pageSize, searchKey, searchParam,authenticatedUser);
         return new ResponseEntity<>(resultPage,HttpStatus.OK);
     }
@@ -53,7 +53,7 @@ public class DisbursementController {
     @GetMapping("/input-based/company-specific")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_CLIENT','ROLE_LITE_CLIENT')")
     public ResponseEntity<Page<TransferableInputBasedSalaryDisbursementRequest>> inputBasedCompanyRequests(int page , int pageSize, SalaryDisbursementRequestSearchKey searchKey, String searchParam){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Page<TransferableInputBasedSalaryDisbursementRequest> resultPage = disbursementService.inputBasedRequests(page, pageSize, searchKey, searchParam,authenticatedUser);
         return new ResponseEntity<>(resultPage,HttpStatus.OK);
     }
@@ -63,7 +63,7 @@ public class DisbursementController {
     @PostMapping(value = "/file-based", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('Initiate Salary Request')")
     public ResponseEntity<TransferableFileBasedSalaryDisbursementRequest> disbursementRequest(@RequestPart MultipartFile multipartFile){
-       AuthenticatedUser authenticatedUser = (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TransferableFileBasedSalaryDisbursementRequest request = disbursementService.disbursementRequest(multipartFile, authenticatedUser);
         return new ResponseEntity<>(request, HttpStatus.OK);
     }
@@ -71,7 +71,7 @@ public class DisbursementController {
     @PostMapping("/input-based")
     @PreAuthorize("hasAuthority('Initiate Salary Request')")
     public ResponseEntity<TransferableInputBasedSalaryDisbursementRequest> disbursementRequest(@RequestBody List<ConsumableDisbursementInput> consumable){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TransferableInputBasedSalaryDisbursementRequest request = disbursementService.disbursementRequest(consumable, authenticatedUser);
         return new ResponseEntity<>(request,HttpStatus.OK);
     }
@@ -83,24 +83,36 @@ public class DisbursementController {
     }
 
     //[REQUEST PROCESSING]
+
     @PutMapping("/{requestId}/authorize")
+    @PreAuthorize("hasAuthority('Authorize Salary Request')")
     public ResponseEntity<Transferable> authorizeRequest(@PathVariable("requestId") String requestId){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Transferable result = disbursementService.authorizeRequest(requestId, DisbursementRequestProcessing.AUTHORIZED, authenticatedUser);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
     @PutMapping("/{requestId}/review")
+    @PreAuthorize("hasAuthority('Review Salary Request')")
     public ResponseEntity<Transferable> reviewRequest(@PathVariable("requestId") String requestId){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Transferable result = disbursementService.reviewRequest(requestId, DisbursementRequestProcessing.REVIEWED, authenticatedUser);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
     @PutMapping("/{requestId}/approve")
+    @PreAuthorize("hasAuthority('Approve Salary Request')")
     public ResponseEntity<Transferable> approveRequest(@PathVariable("requestId") String requestId){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Transferable result = disbursementService.approveRequest(requestId, DisbursementRequestProcessing.APPROVED, authenticatedUser);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @PutMapping("/{requestId}/decline")
+    @PreAuthorize("hasAuthority('Decline Salary Request')")
+    public ResponseEntity<Transferable> declineRequest(@PathVariable("requestId") String requestId){
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Transferable result = disbursementService.declineRequest(requestId,DisbursementRequestProcessing.DECLINED,authenticatedUser);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 }

@@ -5,16 +5,20 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
   thymeleaf:
     prefix: classpath:/templates
     suffix: .html
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 storage:
   uploads:
     files: uploads/files/
+
+jwt:
+  securityKey: qwertyuiop1234567yuitrewwwdfgbhjklkmjnzsd567890hgjdfgtreyuhnbvfgsssjkj8765432rtwuh
 
 

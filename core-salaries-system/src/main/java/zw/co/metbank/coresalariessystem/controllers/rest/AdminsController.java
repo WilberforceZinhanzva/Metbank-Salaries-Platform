@@ -1,5 +1,6 @@
 package zw.co.metbank.coresalariessystem.controllers.rest;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -10,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableAdmin;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableAdmin;
 import zw.co.metbank.coresalariessystem.models.enums.AdminsSearchKey;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.AdminsService;
 
 import java.security.Principal;
 
+@Api
 @RestController
 @RequestMapping("/api/v1/admins")
 public class AdminsController {
@@ -32,7 +34,7 @@ public class AdminsController {
     @PostMapping
     @PreAuthorize("hasPermission('RegisterAdmins')")
     public ResponseEntity<TransferableAdmin> newAdmin(@RequestBody ConsumableAdmin consumable, Principal principal){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TransferableAdmin result = adminsService.newAdmin(consumable,authenticatedUser);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

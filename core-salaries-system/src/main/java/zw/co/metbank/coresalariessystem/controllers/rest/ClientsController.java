@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableClient;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClient;
 import zw.co.metbank.coresalariessystem.models.enums.ClientsSearchKey;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.ClientsService;
 
 @RestController
@@ -31,7 +31,7 @@ public class ClientsController {
     @PostMapping
     @PreAuthorize("hasAuthority('Register Clients')")
     public ResponseEntity<TransferableClient> newClient(@RequestBody ConsumableClient consumable){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TransferableClient result = clientsService.newClient(consumable,authenticatedUser);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

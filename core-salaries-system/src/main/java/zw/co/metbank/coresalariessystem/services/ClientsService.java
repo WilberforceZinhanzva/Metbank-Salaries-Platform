@@ -17,7 +17,7 @@ import zw.co.metbank.coresalariessystem.models.enums.Permissions;
 import zw.co.metbank.coresalariessystem.models.enums.Roles;
 import zw.co.metbank.coresalariessystem.projections.IdsOnly;
 import zw.co.metbank.coresalariessystem.repositories.*;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
@@ -109,7 +109,7 @@ public class ClientsService {
         return serializedPage;
     }
 
-    public TransferableClient newClient(ConsumableClient consumable, AuthenticatedUser authenticatedUser){
+    public TransferableClient newClient(ConsumableClient consumable, StreamlinedAuthenticatedUser authenticatedUser){
 
 
         String actor = authenticatedUser.getFullname();

@@ -41,6 +41,7 @@ public class ApplicationUserDetailsService implements UserDetailsService {
             ClientProfile profile = (ClientProfile) user.get().getProfile();
             fullname = profile.getFullName();
             info.putIfAbsent("companyId",profile.getClientCompany().getId());
+            info.putIfAbsent("companyName",profile.getClientCompany().getName());
         }
         if(user.get().getProfile() instanceof AdminProfile){
             AdminProfile profile = (AdminProfile) user.get().getProfile();

@@ -19,7 +19,7 @@ import zw.co.metbank.coresalariessystem.repositories.AdminProfileRepository;
 import zw.co.metbank.coresalariessystem.repositories.PermissionRepository;
 import zw.co.metbank.coresalariessystem.repositories.RoleRepository;
 import zw.co.metbank.coresalariessystem.repositories.UserRepository;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
@@ -93,7 +93,7 @@ public class AdminsService {
         return serializedPage;
     }
 
-    public TransferableAdmin newAdmin(ConsumableAdmin consumable, AuthenticatedUser authenticatedUser){
+    public TransferableAdmin newAdmin(ConsumableAdmin consumable, StreamlinedAuthenticatedUser authenticatedUser){
 
         String actor = authenticatedUser.getFullname();
         String actorId = authenticatedUser.getUserId();

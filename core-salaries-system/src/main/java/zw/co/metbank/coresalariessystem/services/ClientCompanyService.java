@@ -13,7 +13,7 @@ import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableCl
 import zw.co.metbank.coresalariessystem.models.entities.ClientCompany;
 import zw.co.metbank.coresalariessystem.models.entities.ClientCompanyActionLogger;
 import zw.co.metbank.coresalariessystem.repositories.ClientCompanyRepository;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
@@ -38,7 +38,7 @@ public class ClientCompanyService {
         return serializedPage;
     }
 
-    public TransferableClientCompany newClientCompany(ConsumableClientCompany consumable, AuthenticatedUser authenticatedUser){
+    public TransferableClientCompany newClientCompany(ConsumableClientCompany consumable, StreamlinedAuthenticatedUser authenticatedUser){
 
         String actor = authenticatedUser.getFullname();
         String actorId = authenticatedUser.getUserId();

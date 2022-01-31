@@ -16,7 +16,7 @@ public class ClientProfile extends UserProfile{
     private String email;
     @Column(name="phonenumber",nullable = false)
     private String phoneNumber;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="client_company")
     private ClientCompany clientCompany;
 

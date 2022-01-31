@@ -1,8 +1,10 @@
 package zw.co.metbank.coresalariessystem.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +20,19 @@ public class FileDownloaderController {
     private FileDownloaderService fileDownloaderService;
 
     @GetMapping("/download")
-    public ResponseEntity<byte[]> download(String filePath){
+    public ResponseEntity<Resource> download(String filePath){
         FileData fileData = fileDownloaderService.download(filePath);
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.CONTENT_DISPOSITION,"inline;filename="+fileData.getFileName());
-        headers.set(HttpHeaders.CONTENT_TYPE,"application/csv");
 
-        return new ResponseEntity<>(fileData.getBytes(),headers, HttpStatus.OK);
+
+        ByteArrayResource resource = new ByteArrayResource(fileData.getBytes());
+
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(Long.valueOf(fileData.getFileSize()))
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 }

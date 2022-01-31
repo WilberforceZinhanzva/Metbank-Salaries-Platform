@@ -25,7 +25,7 @@ import zw.co.metbank.coresalariessystem.repositories.ClientCompanyRepository;
 import zw.co.metbank.coresalariessystem.repositories.FileBasedSalaryDisbursementRequestRepository;
 import zw.co.metbank.coresalariessystem.repositories.InputBasedSalaryDisbursementRequestRepository;
 import zw.co.metbank.coresalariessystem.repositories.SalaryDisbursementRequestRepository;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
@@ -123,14 +123,14 @@ public class DisbursementService {
         return serializedPage;
     }
 
-    public TransferableFileBasedSalaryDisbursementRequest disbursementRequest(MultipartFile multipartFile, AuthenticatedUser authenticatedUser){
+    public TransferableFileBasedSalaryDisbursementRequest disbursementRequest(MultipartFile multipartFile, StreamlinedAuthenticatedUser authenticatedUser){
 
         String initiatorId = authenticatedUser.getUserId();
         String initiatorName = authenticatedUser.getFullname();
 
         //[FETCH COMPANY]
 
-        Optional<ClientCompany>company =clientCompanyRepository.findById(authenticatedUser.getInfo().get("companyId"));
+        Optional<ClientCompany>company =clientCompanyRepository.findById(authenticatedUser.findInfoByKey("companyId"));
         if(company.isEmpty())
             throw new ResourceNotFoundException("Company not found!");
 
@@ -170,13 +170,13 @@ public class DisbursementService {
 
     }
 
-    public TransferableInputBasedSalaryDisbursementRequest disbursementRequest(List<ConsumableDisbursementInput> consumable, AuthenticatedUser authenticatedUser){
+    public TransferableInputBasedSalaryDisbursementRequest disbursementRequest(List<ConsumableDisbursementInput> consumable, StreamlinedAuthenticatedUser authenticatedUser){
 
         String initiatorId = authenticatedUser.getUserId();
         String initiatorName = authenticatedUser.getFullname();
 
         //[FETCH COMPANY]
-        Optional<ClientCompany> company =clientCompanyRepository.findById(authenticatedUser.getInfo().get("companyId"));
+        Optional<ClientCompany> company =clientCompanyRepository.findById(authenticatedUser.findInfoByKey("companyId"));
         if(company.isEmpty())
             throw new ResourceNotFoundException("Company not found");
 
@@ -270,29 +270,29 @@ public class DisbursementService {
 
     //[CLIENT COMPANY SPECIFIC REQUESTS]
 
-    public Page<TransferableFileBasedSalaryDisbursementRequest> fileBasedRequests(int page , int pageSize, SalaryDisbursementRequestSearchKey searchKey, String searchParam,AuthenticatedUser authenticatedUser){
+    public Page<TransferableFileBasedSalaryDisbursementRequest> fileBasedRequests(int page , int pageSize, SalaryDisbursementRequestSearchKey searchKey, String searchParam,StreamlinedAuthenticatedUser authenticatedUser){
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<FileBasedSalaryDisbursementRequest> resultPage = new PageImpl<>(new ArrayList<>(),pageable,0);
         switch(searchKey){
             case TIME_FRAME:
                 break;
             case STAGE:
-                resultPage = fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndCurrentStage(authenticatedUser.getInfo().get("companyId"),DisbursementRequestProcessing.valueOf(searchParam),pageable);
+                resultPage = fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndCurrentStage(authenticatedUser.findInfoByKey("companyId"),DisbursementRequestProcessing.valueOf(searchParam),pageable);
                 break;
             case INITIATOR:
-                resultPage= fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.getInfo().get("companyId"),searchParam,DisbursementRequestProcessing.INITIATED,pageable);
+                resultPage= fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.findInfoByKey("companyId"),searchParam,DisbursementRequestProcessing.INITIATED,pageable);
                 break;
             case AUTHORIZER:
-                resultPage= fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.getInfo().get("companyId"),searchParam,DisbursementRequestProcessing.AUTHORIZED,pageable);
+                resultPage= fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.findInfoByKey("companyId"),searchParam,DisbursementRequestProcessing.AUTHORIZED,pageable);
                 break;
             case REVIEWER:
-                resultPage= fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.getInfo().get("companyId"),searchParam,DisbursementRequestProcessing.REVIEWED,pageable);
+                resultPage= fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.findInfoByKey("companyId"),searchParam,DisbursementRequestProcessing.REVIEWED,pageable);
                 break;
             case APPROVER:
-                resultPage= fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.getInfo().get("companyId"),searchParam,DisbursementRequestProcessing.APPROVED,pageable);
+                resultPage= fileBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.findInfoByKey("companyId"),searchParam,DisbursementRequestProcessing.APPROVED,pageable);
                 break;
             default:
-                resultPage = fileBasedSalaryDisbursementRequestRepository.findByCompany_Id(authenticatedUser.getInfo().get("companyId"),pageable);
+                resultPage = fileBasedSalaryDisbursementRequestRepository.findByCompany_Id(authenticatedUser.findInfoByKey("companyId"),pageable);
                 break;
         }
 
@@ -300,29 +300,29 @@ public class DisbursementService {
         Page<TransferableFileBasedSalaryDisbursementRequest> serializedPage = new PageImpl<>(serializedList,pageable,resultPage.getTotalElements());
         return serializedPage;
     }
-    public Page<TransferableInputBasedSalaryDisbursementRequest> inputBasedRequests(int page , int pageSize, SalaryDisbursementRequestSearchKey searchKey, String searchParam,AuthenticatedUser authenticatedUser){
+    public Page<TransferableInputBasedSalaryDisbursementRequest> inputBasedRequests(int page , int pageSize, SalaryDisbursementRequestSearchKey searchKey, String searchParam,StreamlinedAuthenticatedUser authenticatedUser){
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<InputBasedSalaryDisbursementRequest> resultPage = new PageImpl<>(new ArrayList<>(),pageable,0);
         switch(searchKey){
             case TIME_FRAME:
                 break;
             case STAGE:
-                resultPage = inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndCurrentStage(authenticatedUser.getInfo().get("companyId"),DisbursementRequestProcessing.valueOf(searchParam),pageable);
+                resultPage = inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndCurrentStage(authenticatedUser.findInfoByKey("companyId"),DisbursementRequestProcessing.valueOf(searchParam),pageable);
                 break;
             case INITIATOR:
-                resultPage= inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.getInfo().get("companyId"),searchParam,DisbursementRequestProcessing.INITIATED,pageable);
+                resultPage= inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.findInfoByKey("companyId"),searchParam,DisbursementRequestProcessing.INITIATED,pageable);
                 break;
             case AUTHORIZER:
-                resultPage= inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.getInfo().get("companyId"),searchParam,DisbursementRequestProcessing.AUTHORIZED,pageable);
+                resultPage= inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.findInfoByKey("companyId"),searchParam,DisbursementRequestProcessing.AUTHORIZED,pageable);
                 break;
             case REVIEWER:
-                resultPage= inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.getInfo().get("companyId"),searchParam,DisbursementRequestProcessing.REVIEWED,pageable);
+                resultPage= inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.findInfoByKey("companyId"),searchParam,DisbursementRequestProcessing.REVIEWED,pageable);
                 break;
             case APPROVER:
-                resultPage= inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.getInfo().get("companyId"),searchParam,DisbursementRequestProcessing.APPROVED,pageable);
+                resultPage= inputBasedSalaryDisbursementRequestRepository.findByCompany_IdAndActionLoggingDoneByContainingIgnoreCaseAndActionLoggingStage(authenticatedUser.findInfoByKey("companyId"),searchParam,DisbursementRequestProcessing.APPROVED,pageable);
                 break;
             default:
-                resultPage = inputBasedSalaryDisbursementRequestRepository.findByCompany_Id(authenticatedUser.getInfo().get("companyId"),pageable);
+                resultPage = inputBasedSalaryDisbursementRequestRepository.findByCompany_Id(authenticatedUser.findInfoByKey("companyId"),pageable);
                 break;
         }
 
@@ -338,7 +338,7 @@ public class DisbursementService {
 
 
     //[REQUEST PROCESSING]
-    private Transferable changeDisbursementRequestStatus(SalaryDisbursementRequest request,DisbursementRequestProcessing newStatus, AuthenticatedUser authenticatedUser){
+    private Transferable changeDisbursementRequestStatus(SalaryDisbursementRequest request,DisbursementRequestProcessing newStatus, StreamlinedAuthenticatedUser authenticatedUser){
 
 
         String actor = authenticatedUser.getFullname();
@@ -366,7 +366,7 @@ public class DisbursementService {
 
     }
 
-    public Transferable authorizeRequest(String requestId,DisbursementRequestProcessing newStatus, AuthenticatedUser authenticatedUser){
+    public Transferable authorizeRequest(String requestId,DisbursementRequestProcessing newStatus, StreamlinedAuthenticatedUser authenticatedUser){
         Optional<SalaryDisbursementRequest> request = salaryDisbursementRequestRepository.findById(requestId);
 
         if(request.isEmpty())
@@ -377,7 +377,7 @@ public class DisbursementService {
 
         return changeDisbursementRequestStatus(request.get(),DisbursementRequestProcessing.AUTHORIZED,authenticatedUser);
     }
-    public Transferable reviewRequest(String requestId,DisbursementRequestProcessing newStatus, AuthenticatedUser authenticatedUser){
+    public Transferable reviewRequest(String requestId,DisbursementRequestProcessing newStatus, StreamlinedAuthenticatedUser authenticatedUser){
         Optional<SalaryDisbursementRequest> request = salaryDisbursementRequestRepository.findById(requestId);
 
         if(request.isEmpty())
@@ -388,7 +388,7 @@ public class DisbursementService {
 
         return changeDisbursementRequestStatus(request.get(),DisbursementRequestProcessing.REVIEWED,authenticatedUser);
     }
-    public Transferable approveRequest(String requestId,DisbursementRequestProcessing newStatus, AuthenticatedUser authenticatedUser){
+    public Transferable approveRequest(String requestId,DisbursementRequestProcessing newStatus, StreamlinedAuthenticatedUser authenticatedUser){
         Optional<SalaryDisbursementRequest> request = salaryDisbursementRequestRepository.findById(requestId);
 
         if(request.isEmpty())
@@ -398,6 +398,14 @@ public class DisbursementService {
             throw new SalaryProcessingException("Salary request cannot be approved at this stage");
 
         return changeDisbursementRequestStatus(request.get(),DisbursementRequestProcessing.APPROVED,authenticatedUser);
+    }
+    public Transferable declineRequest(String requestId, DisbursementRequestProcessing newStatus, StreamlinedAuthenticatedUser authenticatedUser){
+        Optional<SalaryDisbursementRequest> request = salaryDisbursementRequestRepository.findById(requestId);
+
+        if(request.isEmpty())
+            throw new ResourceNotFoundException("Salary disbursement request not found!");
+
+        return changeDisbursementRequestStatus(request.get(),DisbursementRequestProcessing.DECLINED,authenticatedUser);
     }
 
 

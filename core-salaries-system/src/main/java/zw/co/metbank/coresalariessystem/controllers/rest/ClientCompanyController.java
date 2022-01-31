@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableClientCompany;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClientCompany;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.ClientCompanyService;
 
 @RestController
@@ -30,7 +30,7 @@ public class ClientCompanyController {
     @PostMapping
     @PreAuthorize("hasAuthority('Register Clients')")
     public ResponseEntity<TransferableClientCompany> newClientCompany(@RequestBody ConsumableClientCompany consumable){
-        AuthenticatedUser authenticatedUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TransferableClientCompany clientCompany = clientCompanyService.newClientCompany(consumable,authenticatedUser);
         return new ResponseEntity<>(clientCompany,HttpStatus.OK);
 

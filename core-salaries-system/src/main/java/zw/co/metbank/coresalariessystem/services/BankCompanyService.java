@@ -13,7 +13,7 @@ import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableBa
 import zw.co.metbank.coresalariessystem.models.entities.BankCompany;
 import zw.co.metbank.coresalariessystem.models.entities.BankCompanyActionLogger;
 import zw.co.metbank.coresalariessystem.repositories.BankCompanyRepository;
-import zw.co.metbank.coresalariessystem.security.AuthenticatedUser;
+import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
@@ -39,7 +39,7 @@ public class BankCompanyService {
         return serializedPage;
     }
 
-    public TransferableBankCompany newBankCompany(ConsumableBankCompany consumable, AuthenticatedUser authenticatedUser){
+    public TransferableBankCompany newBankCompany(ConsumableBankCompany consumable, StreamlinedAuthenticatedUser authenticatedUser){
 
 
         String actor = authenticatedUser.getFullname();

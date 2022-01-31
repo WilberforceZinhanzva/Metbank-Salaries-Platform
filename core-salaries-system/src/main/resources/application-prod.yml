@@ -46,3 +46,7 @@ spring:
       jackson:
         serialization:
           fail-on-empty-beans: false
+
+storage:
+  uploads:
+    files: /home/uploads/files/

@@ -1,7 +1,7 @@
 
 spring:
   profiles:
-    active: prod
+    active: dev
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,9 +14,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-storage:
-  uploads:
-    files: uploads/files/
+
 
 jwt:
   securityKey: qwertyuiop1234567yuitrewwwdfgbhjklkmjnzsd567890hgjdfgtreyuhnbvfgsssjkj8765432rtwuh

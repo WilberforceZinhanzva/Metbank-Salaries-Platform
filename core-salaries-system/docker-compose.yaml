@@ -11,6 +11,8 @@ services:
     image: wibzin/salary_manager:v1
     ports:
       - 8080:8080
+    volumes:
+    - file_uploads:/var/lib/salarymanager/data
     networks:
       platform-network:
         ipv4_address: "192.168.1.101"
@@ -46,3 +48,4 @@ networks:
 volumes:
   mariadb-data:
     driver: local
+  file-uploads

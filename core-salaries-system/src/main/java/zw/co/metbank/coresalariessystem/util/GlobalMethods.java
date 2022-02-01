@@ -1,7 +1,9 @@
 package zw.co.metbank.coresalariessystem.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 
 public class GlobalMethods {
@@ -27,6 +29,16 @@ public class GlobalMethods {
     public static DateTimeFormatter dayMonthYearFormatter(){
         return DateTimeFormatter.ofPattern("dd/MM/yyyy");
     }
+
+    public static String formatDate(LocalDateTime dateTime){
+       DateTimeFormatter f=  DateTimeFormatter.ofPattern("dd MMM yyyy @ HH:mm");
+       return dateTime.format(f);
+    }
+    public static String formatDateOnly(LocalDate date){
+        DateTimeFormatter f=  DateTimeFormatter.ofPattern("dd MMM yyyy");
+        return date.format(f);
+    }
+
 
     public static String generateFilename(String requestId){
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("ddMMMyyyyHHMM"));

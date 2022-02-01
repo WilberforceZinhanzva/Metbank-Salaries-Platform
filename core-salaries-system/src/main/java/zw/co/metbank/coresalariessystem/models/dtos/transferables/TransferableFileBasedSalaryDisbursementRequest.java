@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import zw.co.metbank.coresalariessystem.models.entities.DisbursementProcessLogger;
 import zw.co.metbank.coresalariessystem.models.entities.FileBasedSalaryDisbursementRequest;
 import zw.co.metbank.coresalariessystem.models.interfaces.Transferable;
+import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class TransferableFileBasedSalaryDisbursementRequest implements Transferable {
     private String id;
-    private LocalDateTime placedOn;
+    private String placedOn;
     private String currentStage;
     private String companyName;
     private String companyId;
@@ -24,7 +25,7 @@ public class TransferableFileBasedSalaryDisbursementRequest implements Transfera
 
     public TransferableFileBasedSalaryDisbursementRequest(FileBasedSalaryDisbursementRequest request){
         this.id = request.getId();
-        this.placedOn = request.getPlacedOn();
+        this.placedOn = GlobalMethods.formatDate(request.getPlacedOn());
         this.currentStage = request.getCurrentStage().toString();
         this.companyName = request.getCompany().getName();
         this.companyId = request.getCompany().getId();

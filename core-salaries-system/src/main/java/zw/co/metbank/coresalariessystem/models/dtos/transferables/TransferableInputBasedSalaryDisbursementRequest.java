@@ -6,8 +6,8 @@ import zw.co.metbank.coresalariessystem.models.entities.DisbursementInput;
 import zw.co.metbank.coresalariessystem.models.entities.DisbursementProcessLogger;
 import zw.co.metbank.coresalariessystem.models.entities.InputBasedSalaryDisbursementRequest;
 import zw.co.metbank.coresalariessystem.models.interfaces.Transferable;
+import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class TransferableInputBasedSalaryDisbursementRequest implements Transferable {
     private String id;
-    private LocalDateTime placedOn;
+    private String placedOn;
     private String currentStage;
     private String companyName;
     private String companyId;
@@ -26,7 +26,7 @@ public class TransferableInputBasedSalaryDisbursementRequest implements Transfer
 
     public TransferableInputBasedSalaryDisbursementRequest(InputBasedSalaryDisbursementRequest request){
         this.id = request.getId();
-        this.placedOn = request.getPlacedOn();
+        this.placedOn = GlobalMethods.formatDate(request.getPlacedOn());
         this.currentStage = request.getCurrentStage().toString();
         this.companyName = request.getCompany().getName();
         this.companyId = request.getCompany().getId();

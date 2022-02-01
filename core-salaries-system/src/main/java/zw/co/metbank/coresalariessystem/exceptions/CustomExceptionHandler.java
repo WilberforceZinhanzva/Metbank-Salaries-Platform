@@ -46,4 +46,16 @@ public class CustomExceptionHandler {
         CustomException exception = new CustomException(e.getMessage(),HttpStatus.CONFLICT);
         return new ResponseEntity<>(exception,HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(value={WrongFileException.class})
+    public ResponseEntity<CustomException> handleWrongFileException(WrongFileException e){
+        CustomException exception = new CustomException(e.getMessage(),HttpStatus.CONFLICT);
+        return new ResponseEntity<>(exception,HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value={InvalidPasswordException.class})
+    public ResponseEntity<CustomException> handleInvalidPasswordException(InvalidPasswordException e){
+        CustomException exception = new CustomException(e.getMessage(),HttpStatus.CONFLICT);
+        return new ResponseEntity<>(exception,HttpStatus.CONFLICT);
+    }
 }

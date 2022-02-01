@@ -68,32 +68,7 @@ public class StartupService {
         log.info("Roles up to date!");
     }
     public void createPermissions(){
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterClients.name))
-//            permissionRepository.save(new Permission(Permissions.RegisterClients.name, Permissions.RegisterClients.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterAdmins.name))
-//            permissionRepository.save(new Permission(Permissions.RegisterAdmins.name,Permissions.RegisterAdmins.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.RegisterBanks.name))
-//            permissionRepository.save(new Permission(Permissions.RegisterBanks.name,Permissions.RegisterAdmins.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteClients.name))
-//            permissionRepository.save(new Permission(Permissions.DeleteClients.name,Permissions.DeleteClients.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteAdmins.name))
-//            permissionRepository.save(new Permission(Permissions.DeleteAdmins.name,Permissions.DeleteAdmins.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeleteBanks.name))
-//            permissionRepository.save(new Permission(Permissions.DeleteBanks.name,Permissions.DeleteBanks.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ChangeUserPermissions.name))
-//            permissionRepository.save(new Permission(Permissions.ChangeUserPermissions.name,Permissions.ChangeUserPermissions.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.InitiateSalaryRequest.name))
-//            permissionRepository.save(new Permission(Permissions.InitiateSalaryRequest.name,Permissions.ChangeUserPermissions.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.AuthorizeSalaryRequest.name))
-//            permissionRepository.save(new Permission(Permissions.AuthorizeSalaryRequest.name,Permissions.AuthorizeSalaryRequest.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ReviewSalaryRequest.name))
-//            permissionRepository.save(new Permission(Permissions.ReviewSalaryRequest.name,Permissions.ReviewSalaryRequest.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.ApproveSalaryRequest.name))
-//            permissionRepository.save(new Permission(Permissions.ApproveSalaryRequest.name,Permissions.ApproveSalaryRequest.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DeclineSalaryRequest.name))
-//            permissionRepository.save(new Permission(Permissions.DeclineSalaryRequest.name,Permissions.DeclineSalaryRequest.description));
-//        if(!permissionRepository.existsByNameIgnoreCase(Permissions.DownloadFiles.name))
-//            permissionRepository.save(new Permission(Permissions.DownloadFiles.name,Permissions.DownloadFiles.description));
+
 
         for(Permissions permissions : new ArrayList<Permissions>(EnumSet.allOf(Permissions.class))){
             if(!permissionRepository.existsByNameIgnoreCase(permissions.name)){
@@ -113,6 +88,7 @@ public class StartupService {
             admin.setUsername("admin@metbank.co.zw");
             admin.setPassword(passwordEncoder.encode("m3tb@nk888"));
             admin.setAccountLocked(false);
+            admin.setPasswordRequired(false);
 
             Optional<Role> role = roleRepository.findByName(Roles.SUPER_ADMIN.name());
             if(role.isEmpty())

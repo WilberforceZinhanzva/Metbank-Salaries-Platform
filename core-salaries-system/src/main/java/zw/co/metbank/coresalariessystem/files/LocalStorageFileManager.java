@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import zw.co.metbank.coresalariessystem.exceptions.FileException;
+import zw.co.metbank.coresalariessystem.exceptions.WrongFileException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,6 +25,9 @@ public class LocalStorageFileManager implements FileManager {
     public FileInfo saveFile(String filename, MultipartFile multipartFile) throws IOException,FileException {
         String originalFilename = multipartFile.getOriginalFilename();
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+        if(!fileExtension.contentEquals(".csv"))
+            throw new WrongFileException("Unacceptable file type! Only csv files are required!");
 
 
         File newFile = new File(uploadsDirectory.concat(filename+fileExtension));

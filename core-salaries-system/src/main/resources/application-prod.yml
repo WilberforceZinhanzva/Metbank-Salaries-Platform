@@ -49,4 +49,4 @@ spring:
 
 storage:
   uploads:
-    files: /home/uploads/files/
+    files: uploads/files/

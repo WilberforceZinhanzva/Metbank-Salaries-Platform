@@ -12,7 +12,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - uploads: /home/uploads
+      - uploads: /var/lib/docker
 
     networks:
       platform-network:

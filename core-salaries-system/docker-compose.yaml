@@ -12,7 +12,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./uploads/files:/var/lib/salarymanager/data
+      - uploads: /home/uploads
 
     networks:
       platform-network:
@@ -49,4 +49,5 @@ networks:
 volumes:
   mariadb-data:
     driver: local
-  file-uploads:
+  uploads:
+    driver: local

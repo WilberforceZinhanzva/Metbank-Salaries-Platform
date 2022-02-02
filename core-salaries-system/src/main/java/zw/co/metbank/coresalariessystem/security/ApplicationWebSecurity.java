@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import zw.co.metbank.coresalariessystem.jwt.JwtTokenVerifier;
 import zw.co.metbank.coresalariessystem.jwt.JwtUsernamePasswordAuthenticationFilter;
 
@@ -56,10 +58,11 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
-                .cors().and().csrf().disable()
-                .headers()
-                .frameOptions()
-                .deny()
+//                .cors().and().csrf().disable()
+//                .headers()
+//                .frameOptions()
+//                .deny()
+                .cors()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -98,6 +101,16 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler(){
         return new CustomAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer(){
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/login").allowedOrigins("http://192.167.1.203:8000");
+            }
+        };
     }
 
 //    @Bean

@@ -2,6 +2,7 @@ package zw.co.metbank.coresalariessystem.models.dtos.transferables;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import zw.co.metbank.coresalariessystem.models.entities.ClientProfile;
 import zw.co.metbank.coresalariessystem.models.entities.Permission;
 import zw.co.metbank.coresalariessystem.models.entities.Role;
 import zw.co.metbank.coresalariessystem.models.entities.User;

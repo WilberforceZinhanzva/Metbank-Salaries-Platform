@@ -12,11 +12,13 @@ public class TransferableClientProfile implements Transferable {
     private String fullName;
     private String email;
     private String phoneNumber;
+    private String company;
 
     public TransferableClientProfile(ClientProfile profile){
         this.id = profile.getId();
         this.fullName = profile.getFullName();
         this.email = profile.getEmail();
         this.phoneNumber = profile.getPhoneNumber();
+        this.company = profile.getClientCompany().getName();
     }
 }

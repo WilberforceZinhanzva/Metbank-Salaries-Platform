@@ -58,11 +58,8 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
-                .cors().and().csrf().disable()
-                .headers()
-                .frameOptions()
-                .deny()
-                .and()
+                .csrf().disable()
+
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager()))

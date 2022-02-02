@@ -58,11 +58,10 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
-//                .cors().and().csrf().disable()
-//                .headers()
-//                .frameOptions()
-//                .deny()
-                .cors()
+                .cors().and().csrf().disable()
+                .headers()
+                .frameOptions()
+                .deny()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -103,15 +102,7 @@ public class ApplicationWebSecurity extends WebSecurityConfigurerAdapter {
         return new CustomAuthenticationFailureHandler();
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer(){
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/login").allowedOrigins("http://192.167.1.203:8000");
-            }
-        };
-    }
+
 
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource()

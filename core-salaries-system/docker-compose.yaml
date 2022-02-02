@@ -12,7 +12,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-    - file-uploads:/var/lib/salarymanager/data
+    - /uploads/files:/var/lib/salarymanager/data
     networks:
       platform-network:
         ipv4_address: "192.168.1.101"

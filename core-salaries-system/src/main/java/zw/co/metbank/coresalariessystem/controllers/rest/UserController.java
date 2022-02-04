@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 import zw.co.metbank.coresalariessystem.models.extras.Password;
+import zw.co.metbank.coresalariessystem.models.extras.PasswordConfirmation;
 import zw.co.metbank.coresalariessystem.models.interfaces.Transferable;
 import zw.co.metbank.coresalariessystem.services.UserService;
 
@@ -50,5 +51,11 @@ public class UserController {
 
         Transferable result = userService.changePassword(password.getPassword());
         return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @PostMapping(value="/confirm-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_LITE_ADMIN')")
+    public ResponseEntity<PasswordConfirmation> confirmPassword(@RequestBody Password password){
+        return new ResponseEntity<>(userService.confirmPassword(password.getPassword()),HttpStatus.OK);
     }
 }

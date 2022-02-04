@@ -33,5 +33,6 @@ public class TransferableClient implements Transferable {
         this.roles = user.getRoles().stream().map(Role::serializeForTransfer).collect(Collectors.toList());
         this.permissions = user.getPermissions().stream().map(Permission::serializeForTransfer).collect(Collectors.toList());
 
+
     }
 }

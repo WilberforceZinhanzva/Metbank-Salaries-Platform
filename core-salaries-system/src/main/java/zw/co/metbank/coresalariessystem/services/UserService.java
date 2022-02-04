@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import zw.co.metbank.coresalariessystem.exceptions.InvalidPasswordException;
 import zw.co.metbank.coresalariessystem.exceptions.ResourceNotFoundException;
 import zw.co.metbank.coresalariessystem.models.entities.User;
+import zw.co.metbank.coresalariessystem.models.extras.PasswordConfirmation;
 import zw.co.metbank.coresalariessystem.models.interfaces.Transferable;
 import zw.co.metbank.coresalariessystem.repositories.UserRepository;
 import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
@@ -67,6 +68,19 @@ public class UserService {
 
         return userRepository.save(user.get()).serializeForTransfer();
 
+    }
+
+    public PasswordConfirmation confirmPassword(String password){
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> user = userRepository.findById(authenticatedUser.getUserId());
+        if(user.isEmpty())
+            throw new ResourceNotFoundException("User not found!");
+
+
+        if(passwordEncoder.matches(password,user.get().getPassword()))
+            return new PasswordConfirmation(true);
+        else
+            return new PasswordConfirmation(false);
     }
 
 

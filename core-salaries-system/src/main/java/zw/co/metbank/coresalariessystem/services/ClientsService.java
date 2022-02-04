@@ -109,6 +109,8 @@ public class ClientsService {
         return serializedPage;
     }
 
+    
+
     public TransferableClient newClient(ConsumableClient consumable, StreamlinedAuthenticatedUser authenticatedUser){
 
 

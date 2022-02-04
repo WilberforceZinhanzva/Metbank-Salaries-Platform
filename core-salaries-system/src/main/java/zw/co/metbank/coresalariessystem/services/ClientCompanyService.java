@@ -12,6 +12,7 @@ import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableClient
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClientCompany;
 import zw.co.metbank.coresalariessystem.models.entities.ClientCompany;
 import zw.co.metbank.coresalariessystem.models.entities.ClientCompanyActionLogger;
+import zw.co.metbank.coresalariessystem.projections.IdAndName;
 import zw.co.metbank.coresalariessystem.repositories.ClientCompanyRepository;
 import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
@@ -37,6 +38,11 @@ public class ClientCompanyService {
         Page<TransferableClientCompany> serializedPage = new PageImpl<>(serializedList,pageable,companiesPage.getTotalElements());
         return serializedPage;
     }
+
+    public List<IdAndName> allClientIdsAndNames(){
+        return clientCompanyRepository.findAllProjectedBy();
+    }
+
 
     public TransferableClientCompany newClientCompany(ConsumableClientCompany consumable, StreamlinedAuthenticatedUser authenticatedUser){
 

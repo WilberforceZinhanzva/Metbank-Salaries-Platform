@@ -10,8 +10,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableClientCompany;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClientCompany;
+import zw.co.metbank.coresalariessystem.projections.IdAndName;
 import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.ClientCompanyService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/client-companies")
@@ -26,6 +29,12 @@ public class ClientCompanyController {
     public ResponseEntity<Page<TransferableClientCompany>> clientCompanies(@RequestParam int page, @RequestParam int pageSize){
         Page<TransferableClientCompany> resultPage = clientCompanyService.clientCompanies(page, pageSize);
         return new ResponseEntity<>(resultPage, HttpStatus.OK);
+    }
+
+    @GetMapping("/projected-id-name")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_LITE_ADMIN')")
+    public ResponseEntity<List<IdAndName>> clientCompaniesWithIdAndName(){
+        return ResponseEntity.ok(clientCompanyService.allClientIdsAndNames());
     }
 
     @PostMapping(consumes= MediaType.APPLICATION_JSON_VALUE)

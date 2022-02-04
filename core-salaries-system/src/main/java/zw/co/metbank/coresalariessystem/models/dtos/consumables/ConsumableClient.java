@@ -10,7 +10,6 @@ import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 @NoArgsConstructor
 public class ConsumableClient implements Consumable {
     private String username;
-    private String password;
     private String fullName;
     private String email;
     private String phoneNumber;
@@ -25,11 +24,7 @@ public class ConsumableClient implements Consumable {
             vc.setMessage("Username required");
             return vc;
         }
-        if(Strings.isNullOrEmpty(password)){
-            vc.setValid(false);
-            vc.setMessage("Password required");
-            return vc;
-        }
+
         if(Strings.isNullOrEmpty(fullName)){
             vc.setValid(false);
             vc.setMessage("Fullname required");

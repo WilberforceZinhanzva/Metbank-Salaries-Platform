@@ -20,6 +20,7 @@ public class ConsumableBankCompany implements Consumable {
             vc.setMessage("Name must not be empty");
             return vc;
         }
+
         return vc;
     }
 }

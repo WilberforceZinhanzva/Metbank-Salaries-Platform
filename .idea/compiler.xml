@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="[2022-January-12]-Salaries-Platform" />
+        <module name="Metbank-Salaries-Platform" />
         <module name="core-salaries-system" />
       </profile>
     </annotationProcessing>

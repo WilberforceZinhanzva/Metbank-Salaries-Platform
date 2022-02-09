@@ -14,4 +14,7 @@ public interface InputBasedSalaryDisbursementRequestRepository extends JpaReposi
 
     Page<InputBasedSalaryDisbursementRequest> findByCompany_Id(String companyId, Pageable pageable);
     Page<InputBasedSalaryDisbursementRequest> findByCompany_NameContainingIgnoreCase(String companyName, Pageable pageable);
+
+    Long countByCompany_Name(String companyName);
+
 }

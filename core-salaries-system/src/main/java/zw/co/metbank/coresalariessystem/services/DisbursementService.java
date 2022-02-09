@@ -5,12 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import zw.co.metbank.coresalariessystem.exceptions.FileCreationException;
-import zw.co.metbank.coresalariessystem.exceptions.InvalidConsumableException;
-import zw.co.metbank.coresalariessystem.exceptions.ResourceNotFoundException;
-import zw.co.metbank.coresalariessystem.exceptions.SalaryProcessingException;
+import zw.co.metbank.coresalariessystem.exceptions.*;
 import zw.co.metbank.coresalariessystem.files.FileInfo;
 import zw.co.metbank.coresalariessystem.files.LocalStorageFileManager;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableDisbursementInput;
@@ -18,7 +16,9 @@ import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableFi
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableInputBasedSalaryDisbursementRequest;
 import zw.co.metbank.coresalariessystem.models.entities.*;
 import zw.co.metbank.coresalariessystem.models.enums.DisbursementRequestProcessing;
+import zw.co.metbank.coresalariessystem.models.enums.Roles;
 import zw.co.metbank.coresalariessystem.models.enums.SalaryDisbursementRequestSearchKey;
+import zw.co.metbank.coresalariessystem.models.extras.RequestsStatistics;
 import zw.co.metbank.coresalariessystem.models.extras.SalaryRequestCsvEntry;
 import zw.co.metbank.coresalariessystem.models.interfaces.Transferable;
 import zw.co.metbank.coresalariessystem.repositories.ClientCompanyRepository;
@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -251,10 +252,31 @@ public class DisbursementService {
     }
 
     public Boolean deleteDisbursementRequest(String requestId){
+
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Optional<SalaryDisbursementRequest> request = salaryDisbursementRequestRepository.findById(requestId);
         if(request.isEmpty())
             throw new ResourceNotFoundException("Disbursement request not found!");
-        salaryDisbursementRequestRepository.delete(request.get());
+
+
+        switch (request.get().getCurrentStage()){
+            case INITIATED:
+                salaryDisbursementRequestRepository.delete(request.get());
+                break;
+            case APPROVED:
+                if(authenticatedUser.getRoles().contains(Roles.SUPER_CLIENT) || authenticatedUser.getRoles().contains(Roles.LITE_ADMIN) || authenticatedUser.getRoles().contains(Roles.SUPER_ADMIN))
+                    salaryDisbursementRequestRepository.delete(request.get());
+                else
+                    throw new ActionForbidden("You cannot delete request at this stage!");
+                break;
+            default:
+                if(authenticatedUser.getRoles().contains(Roles.LITE_ADMIN) || authenticatedUser.getRoles().contains(Roles.SUPER_ADMIN))
+                    salaryDisbursementRequestRepository.delete(request.get());
+                else
+                    throw new ActionForbidden("Only admins can delete request at this stage!");
+                break;
+        }
 
         if(request.get() instanceof InputBasedSalaryDisbursementRequest){
             InputBasedSalaryDisbursementRequest inputReq = ((InputBasedSalaryDisbursementRequest) request.get());
@@ -408,5 +430,35 @@ public class DisbursementService {
         return changeDisbursementRequestStatus(request.get(),DisbursementRequestProcessing.DECLINED,authenticatedUser);
     }
 
+
+    //[STATISTICS]
+
+    public RequestsStatistics statistics(){
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+
+        RequestsStatistics requestsStatistics = new RequestsStatistics();
+        if(authenticatedUser.getRoles().contains(Roles.LITE_CLIENT) || authenticatedUser.getRoles().contains(Roles.SUPER_CLIENT)){
+            String companyName = authenticatedUser.findInfoByKey("companyName");
+            requestsStatistics.setApprovedRequests(salaryDisbursementRequestRepository.countByCurrentStageAndCompany_Name(DisbursementRequestProcessing.APPROVED,companyName));
+            requestsStatistics.setAuthorizedRequests(salaryDisbursementRequestRepository.countByCurrentStageAndCompany_Name(DisbursementRequestProcessing.AUTHORIZED,companyName));
+            requestsStatistics.setRemittedRequests(salaryDisbursementRequestRepository.countByCurrentStageAndCompany_Name(DisbursementRequestProcessing.REMITTED,companyName));
+            requestsStatistics.setReviewedRequests(salaryDisbursementRequestRepository.countByCurrentStageAndCompany_Name(DisbursementRequestProcessing.REVIEWED,companyName));
+            requestsStatistics.setInitiatedRequests(salaryDisbursementRequestRepository.countByCurrentStageAndCompany_Name(DisbursementRequestProcessing.INITIATED,companyName));
+            requestsStatistics.setFileBasedRequests(fileBasedSalaryDisbursementRequestRepository.countByCompany_Name(companyName));
+            requestsStatistics.setInputBasedRequests(inputBasedSalaryDisbursementRequestRepository.countByCompany_Name(companyName));
+
+        }else{
+            requestsStatistics.setApprovedRequests(salaryDisbursementRequestRepository.countByCurrentStage(DisbursementRequestProcessing.APPROVED));
+            requestsStatistics.setAuthorizedRequests(salaryDisbursementRequestRepository.countByCurrentStage(DisbursementRequestProcessing.AUTHORIZED));
+            requestsStatistics.setRemittedRequests(salaryDisbursementRequestRepository.countByCurrentStage(DisbursementRequestProcessing.REMITTED));
+            requestsStatistics.setReviewedRequests(salaryDisbursementRequestRepository.countByCurrentStage(DisbursementRequestProcessing.REVIEWED));
+            requestsStatistics.setInitiatedRequests(salaryDisbursementRequestRepository.countByCurrentStage(DisbursementRequestProcessing.INITIATED));
+            requestsStatistics.setFileBasedRequests(fileBasedSalaryDisbursementRequestRepository.count());
+            requestsStatistics.setInputBasedRequests(inputBasedSalaryDisbursementRequestRepository.count());
+        }
+
+        return requestsStatistics;
+    }
 
 }

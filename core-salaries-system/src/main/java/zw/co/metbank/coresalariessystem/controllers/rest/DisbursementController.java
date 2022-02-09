@@ -14,6 +14,7 @@ import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableFi
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableInputBasedSalaryDisbursementRequest;
 import zw.co.metbank.coresalariessystem.models.enums.DisbursementRequestProcessing;
 import zw.co.metbank.coresalariessystem.models.enums.SalaryDisbursementRequestSearchKey;
+import zw.co.metbank.coresalariessystem.models.extras.RequestsStatistics;
 import zw.co.metbank.coresalariessystem.models.interfaces.Transferable;
 import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.services.DisbursementService;
@@ -76,7 +77,7 @@ public class DisbursementController {
         return new ResponseEntity<>(request,HttpStatus.OK);
     }
     @DeleteMapping("/{requestId}")
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN') AND hasAuthority('Delete Salary Request')")
+    @PreAuthorize("hasAuthority('Delete Salary Request')")
     public ResponseEntity<Boolean> deleteDisbursementRequest(@PathVariable("requestId") String requestId){
         Boolean isDeleted = disbursementService.deleteDisbursementRequest(requestId);
         return new ResponseEntity<>(isDeleted,HttpStatus.OK);
@@ -114,5 +115,15 @@ public class DisbursementController {
         StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Transferable result = disbursementService.declineRequest(requestId,DisbursementRequestProcessing.DECLINED,authenticatedUser);
         return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+
+
+    //[STATISTICS]
+    @GetMapping("/statistics")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<RequestsStatistics> statistics(){
+        RequestsStatistics requestsStatistics = disbursementService.statistics();
+        return ResponseEntity.ok(requestsStatistics);
     }
 }

@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import zw.co.metbank.coresalariessystem.models.interfaces.Consumable;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 public class ConsumableClient implements Consumable {
@@ -14,7 +17,7 @@ public class ConsumableClient implements Consumable {
     private String email;
     private String phoneNumber;
     private String companyId;
-    private String role;
+    private List<String> roles = new ArrayList<>();
 
     @Override
     public ValidityChecker checkValidity() {
@@ -43,6 +46,11 @@ public class ConsumableClient implements Consumable {
         if(Strings.isNullOrEmpty(companyId)){
             vc.setValid(false);
             vc.setMessage("Company Id required");
+            return vc;
+        }
+        if(roles.isEmpty()){
+            vc.setValid(false);
+            vc.setMessage("Roles must not be empty");
             return vc;
         }
         return vc;

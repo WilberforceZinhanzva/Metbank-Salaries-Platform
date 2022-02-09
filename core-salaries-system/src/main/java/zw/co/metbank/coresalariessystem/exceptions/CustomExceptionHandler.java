@@ -58,4 +58,10 @@ public class CustomExceptionHandler {
         CustomException exception = new CustomException(e.getMessage(),HttpStatus.CONFLICT);
         return new ResponseEntity<>(exception,HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(value={ActionForbidden.class})
+    public ResponseEntity<CustomException> handleForbiddenActionException(ActionForbidden e){
+        CustomException exception = new CustomException(e.getMessage(),HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(exception,HttpStatus.FORBIDDEN);
+    }
 }

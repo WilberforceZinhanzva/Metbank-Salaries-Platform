@@ -21,6 +21,7 @@ public class BankCompany implements Serializable {
     private String name;
     @Column(name="registered_on")
     private LocalDate registeredOn;
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "bankCompany")
     private List<BankUserProfile> usersForBank = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "bankCompany")

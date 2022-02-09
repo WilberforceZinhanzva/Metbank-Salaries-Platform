@@ -18,6 +18,7 @@ import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +53,19 @@ public class ClientCompanyService {
         ValidityChecker vc = consumable.checkValidity();
         if(!vc.isValid())
             throw new InvalidConsumableException(vc.getMessage());
-        ClientCompany clientCompany = new ClientCompany(consumable.getName());
+        ClientCompany clientCompany = new ClientCompany();
+        clientCompany.setId(GlobalMethods.generateId("CC"));
+        clientCompany.setName(consumable.getName());
+        clientCompany.setRegisteredOn(LocalDate.now());
+        clientCompany.setAccountNumber(consumable.getAccountNumber());
+        clientCompany.setPersonInCharge(consumable.getPersonInCharge());
+        clientCompany.setAddress(consumable.getAddress());
+        clientCompany.setEmail(consumable.getEmail());
+        clientCompany.setPhone(consumable.getPhone());
+        clientCompany.setContactPersonName(consumable.getContactPersonName());
+        clientCompany.setContactPersonPhone(consumable.getContactPersonPhone());
+        clientCompany.setContactPersonTitle(consumable.getContactPersonTitle());
+
 
         ClientCompanyActionLogger logger = new ClientCompanyActionLogger();
         logger.setId(GlobalMethods.generateId("CCAL"));

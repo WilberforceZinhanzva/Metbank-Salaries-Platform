@@ -17,5 +17,6 @@ public class TransferableBankCompany implements Transferable {
         this.id = company.getId();
         this.name = company.getName();
         this.registeredOn = GlobalMethods.formatDateOnly(company.getRegisteredOn());
+
     }
 }

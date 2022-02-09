@@ -14,4 +14,7 @@ public interface FileBasedSalaryDisbursementRequestRepository extends JpaReposit
     Page<FileBasedSalaryDisbursementRequest> findByCompany_IdAndCurrentStage(String companyId,DisbursementRequestProcessing currentStage, Pageable pageable);
     Page<FileBasedSalaryDisbursementRequest> findByCompany_Id(String id, Pageable pageable);
     Page<FileBasedSalaryDisbursementRequest> findByCompany_NameContainingIgnoreCase(String companyName, Pageable pageable);
+
+    Long countByCompany_Name(String companyName);
+
 }

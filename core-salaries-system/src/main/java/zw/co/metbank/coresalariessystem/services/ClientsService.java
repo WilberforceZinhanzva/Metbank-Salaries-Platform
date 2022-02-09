@@ -109,8 +109,6 @@ public class ClientsService {
         return serializedPage;
     }
 
-    
-
     public TransferableClient newClient(ConsumableClient consumable, StreamlinedAuthenticatedUser authenticatedUser){
 
 
@@ -128,12 +126,18 @@ public class ClientsService {
         client.setPassword(passwordEncoder.encode(consumable.getUsername()));
         client.setAccountLocked(false);
 
-        Optional<Role> role = roleRepository.findByName(consumable.getRole());
-        if(role.isEmpty())
-            throw new ResourceNotFoundException("Role "+ consumable.getRole()+ " could not be found!");
-        client.getRoles().add(role.get());
+        for(String roleName : consumable.getRoles()){
+            Optional<Role> role = roleRepository.findByName(roleName);
+            if(role.isEmpty())
+                throw new ResourceNotFoundException("Role "+ roleName+ " could not be found!");
+            client.getRoles().add(role.get());
+        }
 
-        if(role.get().getName().contentEquals(Roles.SUPER_CLIENT.name())){
+
+
+
+
+        if(client.getRoles().stream().anyMatch(r -> r.getName().contentEquals(Roles.SUPER_CLIENT.name()))){
 
             Optional<Permission> p1 = permissionRepository.findByName(Permissions.RegisterClients.name());
             if(p1.isPresent())
@@ -143,14 +147,20 @@ public class ClientsService {
             if(p2.isPresent())
                 client.getPermissions().add(p2.get());
 
-
+            Optional<Permission> delReq = permissionRepository.findByName(Permissions.DeleteSalaryRequest.name);
+            if(delReq.isPresent())
+                client.getPermissions().add(delReq.get());
 
         }
-        else if(role.get().getName().contentEquals(Roles.LITE_CLIENT.name())){
+        else if(client.getRoles().stream().anyMatch(r -> r.getName().contentEquals(Roles.LITE_CLIENT.name()))){
 
             Optional<Permission> p3 = permissionRepository.findByName(Permissions.InitiateSalaryRequest.name);
             if(p3.isPresent())
                 client.getPermissions().add(p3.get());
+
+            Optional<Permission> delReq = permissionRepository.findByName(Permissions.DeleteSalaryRequest.name);
+            if(delReq.isPresent())
+                client.getPermissions().add(delReq.get());
         }
 
         //[PROFILE]

@@ -21,6 +21,7 @@ import java.util.List;
 public class User implements Serializable {
     @Id
     private String id;
+    @Column(unique=true)
     private String username;
     private String password;
     private Boolean accountLocked;

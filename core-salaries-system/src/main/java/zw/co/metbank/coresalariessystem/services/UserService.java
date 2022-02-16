@@ -121,6 +121,9 @@ public class UserService {
 
         user.get().setPermissions(requiredPermissions);
 
+        //user.get().getPermissions().stream().forEach(p-> System.out.println(p.getName()));
+
+
         return userRepository.save(user.get()).serializeForTransfer();
     }
 
@@ -164,14 +167,22 @@ public class UserService {
     //[Functional Api]
 
     private BiFunction<List<String>,List<Permission>,List<Permission>> permissionRevoker = (namesList, assignedPermissions)->{
-        return assignedPermissions.stream().dropWhile(p ->{
-            return namesList.stream().anyMatch(s->s.contentEquals(p.getName()));
+//        return assignedPermissions.stream().dropWhile(p ->{
+//            return namesList.stream().anyMatch(s->s.contentEquals(p.getName()));
+//        }).collect(Collectors.toList());
+
+        return assignedPermissions.stream().filter(p ->{
+            return !namesList.stream().anyMatch(s->s.contentEquals(p.getName()));
         }).collect(Collectors.toList());
     };
 
     private BiFunction<List<String>, List<Role>,List<Role>> rolesRevoker = (namesList, assignedRoles)->{
-        return assignedRoles.stream().dropWhile(r->{
-            return namesList.stream().anyMatch(s->s.contentEquals(r.getName()));
+//        return assignedRoles.stream().dropWhile(r->{
+//            return namesList.stream().anyMatch(s->s.contentEquals(r.getName()));
+//        }).collect(Collectors.toList());
+
+        return assignedRoles.stream().filter(r ->{
+            return !namesList.stream().anyMatch(s->s.contentEquals(r.getName()));
         }).collect(Collectors.toList());
     };
 

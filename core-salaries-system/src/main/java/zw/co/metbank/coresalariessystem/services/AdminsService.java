@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import zw.co.metbank.coresalariessystem.exceptions.InvalidConsumableException;
 import zw.co.metbank.coresalariessystem.exceptions.ResourceNotFoundException;
@@ -41,6 +42,9 @@ public class AdminsService {
 
     @Autowired
     private AdminProfileRepository adminProfileRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 
@@ -105,7 +109,7 @@ public class AdminsService {
         User admin = new User();
         admin.setId(GlobalMethods.generateId("ADMIN"));
         admin.setUsername(consumable.getUsername());
-        admin.setPassword(consumable.getUsername());
+        admin.setPassword(passwordEncoder.encode(consumable.getUsername()));
         admin.setAccountLocked(false);
 
 

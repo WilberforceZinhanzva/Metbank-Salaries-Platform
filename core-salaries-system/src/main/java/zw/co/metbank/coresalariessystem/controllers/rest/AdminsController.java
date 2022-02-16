@@ -32,8 +32,8 @@ public class AdminsController {
     }
 
     @PostMapping
-    @PreAuthorize("hasPermission('RegisterAdmins')")
-    public ResponseEntity<TransferableAdmin> newAdmin(@RequestBody ConsumableAdmin consumable, Principal principal){
+    @PreAuthorize("hasAuthority('Register Admins')")
+    public ResponseEntity<TransferableAdmin> newAdmin(@RequestBody ConsumableAdmin consumable){
         StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         TransferableAdmin result = adminsService.newAdmin(consumable,authenticatedUser);
         return new ResponseEntity<>(result, HttpStatus.OK);

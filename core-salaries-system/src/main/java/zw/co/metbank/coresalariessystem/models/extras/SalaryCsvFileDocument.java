@@ -15,12 +15,14 @@ import java.util.Map;
 public class SalaryCsvFileDocument {
 
     private List<SalaryRequestCsvEntry> recordEntries = new ArrayList<>();
-    private Map<String,String> totalAmountsMap = new HashMap<String,String>();
+
+    private List<AggregateAmount> amounts = new ArrayList<>();
     private int totalBeneficiaries;
 
     public void resolveDocument(){
         this.totalBeneficiaries = recordEntries.size();
 
+        Map<String,String> totalAmountsMap = new HashMap<String,String>();
         recordEntries.forEach(entry ->{
             if(totalAmountsMap.isEmpty()){
                 totalAmountsMap.putIfAbsent(entry.getCurrency(),entry.getAmount());
@@ -35,6 +37,13 @@ public class SalaryCsvFileDocument {
                     totalAmountsMap.putIfAbsent(entry.getCurrency(),entry.getAmount());
                 }
             }
+        });
+
+        totalAmountsMap.forEach((k,v) ->{
+            AggregateAmount aggregateAmount = new AggregateAmount();
+            aggregateAmount.setCurrency(k);
+            aggregateAmount.setAmount(v);
+            amounts.add(aggregateAmount);
         });
 
     }

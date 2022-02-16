@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import zw.co.metbank.coresalariessystem.exceptions.InvalidConsumableException;
+import zw.co.metbank.coresalariessystem.exceptions.ResourceAlreadyExistsException;
 import zw.co.metbank.coresalariessystem.exceptions.ResourceNotFoundException;
 import zw.co.metbank.coresalariessystem.models.dtos.consumables.ConsumableClient;
 import zw.co.metbank.coresalariessystem.models.dtos.transferables.TransferableClient;
@@ -119,6 +120,10 @@ public class ClientsService {
         ValidityChecker vc = consumable.checkValidity();
         if(!vc.isValid())
             throw new InvalidConsumableException(vc.getMessage());
+
+
+        if(userRepository.existsByUsernameIgnoreCase(consumable.getUsername()))
+            throw new ResourceAlreadyExistsException("Username "+ consumable.getUsername()+ " already taken");
 
         User client = new User();
         client.setId(GlobalMethods.generateId("CLIENT"));

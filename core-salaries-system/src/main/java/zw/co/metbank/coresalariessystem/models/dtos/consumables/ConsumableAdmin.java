@@ -10,7 +10,6 @@ import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 @NoArgsConstructor
 public class ConsumableAdmin implements Consumable {
     private String username;
-    private String password;
     private String fullName;
     private String department;
     private String role;
@@ -23,11 +22,7 @@ public class ConsumableAdmin implements Consumable {
             vc.setMessage("Username required");
             return vc;
         }
-        if(Strings.isNullOrEmpty(password)){
-            vc.setValid(false);
-            vc.setMessage("Password required");
-            return vc;
-        }
+
         if(Strings.isNullOrEmpty(fullName)){
             vc.setValid(false);
             vc.setMessage("Fullname required");

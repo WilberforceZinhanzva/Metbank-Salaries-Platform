@@ -64,4 +64,10 @@ public class CustomExceptionHandler {
         CustomException exception = new CustomException(e.getMessage(),HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(exception,HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(value={FileParseException.class})
+    public ResponseEntity<CustomException> handleFileParseException(FileParseException e){
+        CustomException exception = new CustomException(e.getMessage(),HttpStatus.CONFLICT);
+        return new ResponseEntity<>(exception,HttpStatus.CONFLICT);
+    }
 }

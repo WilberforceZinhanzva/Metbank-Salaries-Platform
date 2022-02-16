@@ -141,6 +141,14 @@ public class DisbursementService {
         request.setCurrentStage(DisbursementRequestProcessing.INITIATED);
         request.setCompany(company.get());
 
+        //[PARSE FILE]
+        try{
+            salaryCsvFilesHandlerService.parseFile(multipartFile);
+        }catch(Exception e){
+            throw new FileParseException(e.getMessage());
+        }
+
+
         FileInfo fileInfo = new FileInfo();
         try {
             fileInfo = localStorageFileManager.saveFile(GlobalMethods.generateFilename(request.getId()),multipartFile);

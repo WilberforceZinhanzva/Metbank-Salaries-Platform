@@ -8,6 +8,7 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import zw.co.metbank.coresalariessystem.exceptions.FileException;
 import zw.co.metbank.coresalariessystem.files.FileInfo;
 import zw.co.metbank.coresalariessystem.models.extras.SalaryCsvFileDocument;
 import zw.co.metbank.coresalariessystem.models.extras.SalaryRequestCsvEntry;
@@ -67,7 +68,7 @@ public class SalaryCsvFilesHandlerService {
     private SalaryCsvFileDocument parseFile(InputStream inputStream){
 
         SalaryCsvFileDocument document = new SalaryCsvFileDocument();
-        try{
+
             Reader reader = new BufferedReader(new InputStreamReader(inputStream));
             CsvToBean<SalaryRequestCsvEntry> csvToBean = new CsvToBeanBuilder(reader)
                     .withType(SalaryRequestCsvEntry.class)
@@ -76,14 +77,14 @@ public class SalaryCsvFilesHandlerService {
 
             List<SalaryRequestCsvEntry> entries = csvToBean.parse();
 
+            if(entries.isEmpty())
+                throw new FileException("No content read from file");
+
 
             document.setRecordEntries(entries);
             document.resolveDocument();
 
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         return document;
     }
 }

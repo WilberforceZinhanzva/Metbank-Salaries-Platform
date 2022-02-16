@@ -7,24 +7,24 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class SalaryRequestCsvEntry {
-    @CsvBindByName(column = "Date")
+    @CsvBindByName(column = "Date",required = true)
     private String date;
-    @CsvBindByName(column = "RemitterAccountNumber")
+    @CsvBindByName(column = "RemitterAccountNumber",required = true)
     private String remitterAccountNumber;
-    @CsvBindByName(column = "BeneficiaryBankName")
+    @CsvBindByName(column = "BeneficiaryBankName",required = true)
     private String beneficiaryBankName;
-    @CsvBindByName(column = "BeneficiaryBankCode")
+    @CsvBindByName(column = "BeneficiaryBankCode",required = true)
     private String beneficiaryBankCode;
-    @CsvBindByName(column = "BeneficiaryAccountNumber")
+    @CsvBindByName(column = "BeneficiaryAccountNumber",required = true)
     private String beneficiaryAccountNumber;
-    @CsvBindByName(column = "BeneficiaryName")
+    @CsvBindByName(column = "BeneficiaryName",required = true)
     private String beneficiaryName;
-    @CsvBindByName(column = "Amount")
+    @CsvBindByName(column = "Amount",required = true)
     private String amount;
-    @CsvBindByName(column = "Currency")
+    @CsvBindByName(column = "Currency",required = true)
     private String currency;
-    @CsvBindByName(column = "Reference")
+    @CsvBindByName(column = "Reference",required = true)
     private String reference;
-    @CsvBindByName(column = "RemitterName")
+    @CsvBindByName(column = "RemitterName",required = true)
     private String remitterName;
 }

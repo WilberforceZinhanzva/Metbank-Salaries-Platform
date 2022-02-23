@@ -11,8 +11,8 @@ services:
     image: wibzin/salary_manager:v1
     ports:
       - 8080:8080
-    volumes:
-      - /home/administrator/requests:/home/administrator/requests
+    #volumes:
+    #  - /home/administrator/requests:/home/administrator/requests
 
 
     networks:

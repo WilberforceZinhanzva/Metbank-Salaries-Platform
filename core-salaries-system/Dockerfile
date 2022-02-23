@@ -1,4 +1,5 @@
 FROM adoptopenjdk/openjdk14
-WORKDIR /salarymanager
-COPY target/salarymanager.jar salarymanager.jar
-ENTRYPOINT ["java","-jar", "/salarymanager/salarymanager.jar"]
+ADD target/salarymanager.jar /home/administrator/requests/salarymanager.jar
+WORKDIR /home/administrator/requests
+#COPY target/salarymanager.jar salarymanager.jar
+ENTRYPOINT ["java","-jar", "salarymanager.jar"]

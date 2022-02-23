@@ -12,7 +12,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - file-uploads:/var/lib/docker
+      - /home/administrator/uploads:/var/lib/docker
 
     networks:
       platform-network:
@@ -49,5 +49,5 @@ networks:
 volumes:
   mariadb-data:
     driver: local
-  file-uploads:
-    driver: local
+  #file-uploads:
+   # driver: local

@@ -12,7 +12,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - /home/administrator/requests:/home/administrator/requests
+      - /home/ssk:/home/administrator/requests
     #volumes:
     #  - /home/administrator/requests:/home/administrator/requests
 

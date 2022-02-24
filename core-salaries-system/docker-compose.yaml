@@ -13,8 +13,8 @@ services:
       - 8080:8080
     volumes:
       - type: bind
-        source: /app
-        target: /home/administrator/ssk
+        source: /home/administrator/ssk
+        target: /app
 
     #volumes:
     #  - /home/administrator/requests:/home/administrator/requests

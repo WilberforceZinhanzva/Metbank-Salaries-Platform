@@ -8,7 +8,3 @@ spring:
 
 
 
-
-storage:
-  uploads:
-    files: uploads/files/

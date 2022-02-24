@@ -13,6 +13,7 @@ services:
       - 8080:8080
     volumes:
     - /home/all_uploads:/app/uploads/files
+    - /home/remittance:/app/uploads/remittance
     #volumes:
     #  - ~/home/administrator/ssk:/app
 

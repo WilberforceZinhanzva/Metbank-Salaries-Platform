@@ -49,6 +49,3 @@ spring:
         serialization:
           fail-on-empty-beans: false
 
-storage:
-  uploads:
-    files: uploads/files/

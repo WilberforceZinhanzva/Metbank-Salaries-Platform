@@ -20,3 +20,7 @@ jwt:
   securityKey: qwertyuiop1234567yuitrewwwdfgbhjklkmjnzsd567890hgjdfgtreyuhnbvfgsssjkj8765432rtwuh
 
 
+storage:
+  uploads:
+    files: uploads/files/
+    remittance: uploads/remittance/

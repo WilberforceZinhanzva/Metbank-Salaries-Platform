@@ -11,6 +11,8 @@ services:
     image: wibzin/salary_manager:v1
     ports:
       - 8080:8080
+    volumes:
+    - /home/all_uploads:/app/uploads/files
     #volumes:
     #  - ~/home/administrator/ssk:/app
 

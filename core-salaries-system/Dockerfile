@@ -1,5 +1,5 @@
 FROM adoptopenjdk/openjdk14
-ADD target/salarymanager.jar /home/administrator/requests/salarymanager.jar
-WORKDIR /home/administrator/requests
+WORKDIR /app
+ADD target/salarymanager.jar /app/salarymanager.jar
 #COPY target/salarymanager.jar salarymanager.jar
 CMD ["java","-jar", "salarymanager.jar"]

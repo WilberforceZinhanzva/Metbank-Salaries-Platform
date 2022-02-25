@@ -1,6 +1,8 @@
 package zw.co.metbank.coresalariessystem.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +31,7 @@ import zw.co.metbank.coresalariessystem.security.StreamlinedAuthenticatedUser;
 import zw.co.metbank.coresalariessystem.util.GlobalMethods;
 import zw.co.metbank.coresalariessystem.util.ValidityChecker;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,6 +41,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class DisbursementService {
 
@@ -53,6 +57,8 @@ public class DisbursementService {
     private SalaryCsvFilesHandlerService salaryCsvFilesHandlerService;
     @Autowired
     private ClientCompanyRepository clientCompanyRepository;
+    @Value("${storage.uploads.remittance}")
+    private String remittancePath;
 
 
 
@@ -436,6 +442,35 @@ public class DisbursementService {
             throw new ResourceNotFoundException("Salary disbursement request not found!");
 
         return changeDisbursementRequestStatus(request.get(),DisbursementRequestProcessing.DECLINED,authenticatedUser);
+    }
+
+    public Transferable remitRequest(String requestId){
+        log.info("Remitting request");
+        StreamlinedAuthenticatedUser authenticatedUser = (StreamlinedAuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<SalaryDisbursementRequest> request = salaryDisbursementRequestRepository.findById(requestId);
+        if(request.isEmpty())
+            throw new ResourceNotFoundException("Disbursement request not found!");
+
+        File file = null;
+        if(request.get() instanceof FileBasedSalaryDisbursementRequest){
+           FileBasedSalaryDisbursementRequest fileReq = (FileBasedSalaryDisbursementRequest) request.get();
+           file = new File(fileReq.getDisbursementFile().getFilePath());
+        }
+        if(request.get() instanceof InputBasedSalaryDisbursementRequest){
+            InputBasedSalaryDisbursementRequest inputReq = (InputBasedSalaryDisbursementRequest) request.get();
+            file = new File(inputReq.getGeneratedSalariesFile().getFilePath());
+        }
+        if(Optional.ofNullable(file).isEmpty())
+            throw new FileCreationException("Failed to create file");
+
+        try {
+            localStorageFileManager.saveFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new FileException(e.getMessage());
+        }
+
+        return changeDisbursementRequestStatus(request.get(),DisbursementRequestProcessing.REMITTED,authenticatedUser);
     }
 
 

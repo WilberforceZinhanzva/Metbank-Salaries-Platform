@@ -40,6 +40,8 @@ public class StartupService {
 
     @Value("${storage.uploads.files}")
     private String uploadsDirectory;
+    @Value("${storage.uploads.remittance}")
+    private String remittanceDirectory;
 
 
 
@@ -133,6 +135,11 @@ public class StartupService {
             if(!new File(uploadsDirectory).exists()){
                 Files.createDirectories(Path.of(uploadsDirectory));
                 log.info("Created uploads directory");
+            }
+
+            if(!new File(remittanceDirectory).exists()){
+                Files.createDirectories(Path.of(remittanceDirectory));
+                log.info("Created remittance directory");
             }
 
 

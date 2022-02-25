@@ -20,6 +20,8 @@ public class LocalStorageFileManager implements FileManager {
 
     @Value("${storage.uploads.files}")
     private String uploadsDirectory;
+    @Value("${storage.uploads.remittance}")
+    private String remittanceDirectory;
 
     @Override
     public FileInfo saveFile(String filename, MultipartFile multipartFile) throws IOException,FileException {
@@ -42,6 +44,25 @@ public class LocalStorageFileManager implements FileManager {
         fileInfo.setFilePath(newFile.getPath());
         fileInfo.setOriginalFileName(originalFilename);
         return fileInfo;
+    }
+
+    public FileInfo saveFile(File file) throws IOException, FileException{
+        String fileExtension = file.getName().substring(file.getName().lastIndexOf("."));
+
+        if(!fileExtension.contentEquals(".csv"))
+            throw new WrongFileException("Unacceptable file type! Only csv files are required!");
+        File newFile = new File(remittanceDirectory.concat(file.getName()));
+        newFile.createNewFile();
+        FileOutputStream fileOutputStream = new FileOutputStream(newFile);
+        fileOutputStream.write(Files.readAllBytes(file.toPath()));
+        fileOutputStream.close();
+
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setFileSize(String.valueOf(Files.size(Path.of(newFile.getPath()))));
+        fileInfo.setFilePath(newFile.getPath());
+        fileInfo.setOriginalFileName(file.getName());
+        return fileInfo;
+
     }
 
     @Override

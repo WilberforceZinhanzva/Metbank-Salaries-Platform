@@ -117,6 +117,13 @@ public class DisbursementController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+    @PutMapping("/{requestId}/remit")
+    @PreAuthorize("hasAuthority('Remit Salary Request')")
+    public ResponseEntity<Transferable> remitRequest(@PathVariable("requestId") String requestId){
+        Transferable result = disbursementService.remitRequest(requestId);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
 
 
     //[STATISTICS]

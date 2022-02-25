@@ -14,6 +14,7 @@ public enum Permissions {
     ReviewSalaryRequest("Review Salary Request","Admin can review a salary request"),
     ApproveSalaryRequest("Approve Salary Request","Admin can approve a salary request"),
     DeclineSalaryRequest("Decline Salary Request","Admin can decline a salary request"),
+    RemitSalaryRequest("Remit Salary Request","Admin can forward salary requests for remittance"),
     DeleteSalaryRequest("Delete Salary Request","Completely wipe out a salary request"),
     DownloadFiles("Download Files","User can download files");
 

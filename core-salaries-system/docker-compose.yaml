@@ -14,7 +14,7 @@ services:
       - ./traefik/traefik.toml:/etc/traefik/traefik.toml
       - ./traefik/log:/var/log
     networks:
-      net:
+      platform-network:
         ipv4_address: "192.168.1.200"
 
   salarymanager:

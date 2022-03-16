@@ -15,7 +15,7 @@ services:
       - ./traefik/log:/var/log
     networks:
       net:
-        - ipv4_address: "192.168.1.200"
+        ipv4_address: "192.168.1.200"
 
   salarymanager:
     depends_on:

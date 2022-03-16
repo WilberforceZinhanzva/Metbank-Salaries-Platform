@@ -1,5 +1,21 @@
 version: '3'
 services:
+  traefik:
+    image: traefik:v2.0.2
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
+      - "traefik.http.routers.traefik.rule=Host('localhost.com')"
+    container_name: traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.toml:/etc/traefik/traefik.toml
+      - ./traefik/log:/var/log
+    networks:
+      - external-proxy
+      - internal-proxy
   salarymanager:
     depends_on:
       - maria-test-db
@@ -53,6 +69,10 @@ networks:
     ipam:
       config:
         - subnet: 192.168.1.0/24
+  external-proxy:
+    external: true
+  internal-proxy:
+    external: true
 
 volumes:
   mariadb-data:

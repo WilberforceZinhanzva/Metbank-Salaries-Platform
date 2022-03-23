@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mariadb://192.168.1.100:3306/salary_management_production?createDatabaseIfNotExist=true&useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&failOverReadOnly=false&allowMultiQueries=true&serverTimezone=Africa/Harare&allowPublicKeyRetrieval=true
+    url: jdbc:mariadb://192.168.1.100:3306/salary_management_test?createDatabaseIfNotExist=true&useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=UTF-8&failOverReadOnly=false&allowMultiQueries=true&serverTimezone=Africa/Harare&allowPublicKeyRetrieval=true
     username: 'root'
     password: 'skdcnwauicn2ucnaecasdsajdnizucawencascdca'
     hikari:

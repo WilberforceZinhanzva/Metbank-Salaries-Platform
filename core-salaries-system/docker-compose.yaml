@@ -26,6 +26,8 @@ services:
       context: .
       dockerfile: Dockerfile
     image: wibzin/salary_manager:v1
+    environment:
+      - "SPRING_PROFILES_ACTIVE=test"
     ports:
       - 8080:8080
     volumes:
